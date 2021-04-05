@@ -9,7 +9,7 @@ branch-conformity:
   stage: conformity
   script:
     - |
-      if [[ ! $CI_COMMIT_REF_NAME =~ ^[a-zA-Z0-9]+\/exercise[0-9]+ ]] && [[ ! "${ALLOWED_USERS}" =~ "$GITLAB_USER_LOGIN}" ]];
+      if [[ ! $CI_COMMIT_REF_NAME =~ ^[a-zA-Z0-9]+\/exercise[0-9]+ ]] && [[ ! "$ALLOWED_USERS" =~ "$GITLAB_USER_LOGIN" ]];
       then
         echo "Branch name not conforming. Must be <identity>/exercise<nr>"
         exit 1
