@@ -72,3 +72,17 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
    the prefix "WIP:" (Work-In-Progress) or "Draft:" to the title. This can be
    changed when ready using the button "Mark as ready" or by removing the prefix
    from the title.
+
+## Sandbox directory
+
+Use the directory `sandbox/` for experiments to store files that should not be
+uploaded to the repository at all. This directory is *ignored* in the `.gitignore`
+file and will thus not be put in the staging area and not be commited.
+
+## FAQ
+
+Here questions and answers will be collected for common problems. A general
+recommendation is  to check the status of all files with `git status`, and to
+follow the instruction given by the git error messages if they occure. Searching
+for the error message in, e.g., google, will often give you a proper answer for
+the problem, e.g. on stackoverflow.com.

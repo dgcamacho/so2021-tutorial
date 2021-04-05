@@ -1,0 +1,6 @@
+# ignore all files in the sandbox directory
+sandbox/
+
+# ignore executables and object files
+a.out
+*.o
