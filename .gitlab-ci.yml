@@ -1,0 +1,10 @@
+stages:
+  - conformity
+  - build
+  - test
+
+branch-conformity:
+  stage: conformity
+  script:
+    - echo "$GITLAB_USER_ID"
+    - [[ $CI_COMMIT_REF_NAME =~ ^[a-zA-Z0-9]+/exercise[0-9]+ || $GITLAB_USER_ID -eq "spraetor" ]]
