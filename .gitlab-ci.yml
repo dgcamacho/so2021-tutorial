@@ -7,4 +7,4 @@ branch-conformity:
   stage: conformity
   script:
     - echo "$GITLAB_USER_ID"
-    - [[ $CI_COMMIT_REF_NAME =~ ^[a-zA-Z0-9]+/exercise[0-9]+ || $GITLAB_USER_ID -eq "spraetor" ]]
+    - if [[ $CI_COMMIT_REF_NAME =~ ^[a-zA-Z0-9]+\/exercise[0-9]+ -or $GITLAB_USER_ID -eq "spraetor" ]]; then exit 1; fi
