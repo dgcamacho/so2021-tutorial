@@ -1,0 +1,38 @@
+stages:
+  - conformity
+  - build
+  - test
+
+image: registry.dune-project.org/docker/ci/ubuntu:20.04
+
+# check that the branch has a valid name
+branch-conformity:
+  stage: conformity
+  script:
+    - |
+      if [[ ! "$CI_COMMIT_REF_NAME" =~ ^[a-zA-Z0-9]+\/exercise[0-9]+ ]] &&
+         [[ ! "$ALLOWED_USERS" =~ "${GITLAB_USER_LOGIN/;/:}" ]];
+      then
+        echo "Branch name not conforming. Must be <identity>/exercise<nr>"
+        exit 1
+      fi
+
+# check whether all files and directories uploaded are in valid naming format
+directory-conformity:
+  stage: conformity
+  script:
+    - |
+      ALLOWED_FILES="README.md;.gitignore;.gitlab-ci.yml"
+      ALLOWED_DIRS=".;..;sandbox"
+      for entry in "./*"; do
+        if [[ -f "$entry" ]] && [[ ! "$ALLOWED_FILES" =~ "${entry/;/:}" ]]; then
+          echo "File $entry not allowed in the root directory."
+          exit 1
+        fi
+        if [[ -d "$entry" ]] && [[ ! "$ALLOWED_DIRS" =~ "${entry/;/:}" ]]; then
+          if [[ ! "$entry" =~ ^exercise[0-9]+ ]]; then
+            echo "Directory $entry not in valid naming format. Must be exercise<nr>/"
+            exit 1
+          fi
+        fi
+      done
