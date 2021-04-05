@@ -1,9 +1,16 @@
 # Tutorial SCPROG in Summer Term 2021
 
+In the course SCPROG - Scientific Programming with C++ - in summer term 2021 we
+are working in the exercises with git - a modern version control system / source
+code management system - to provide assignments and for you to upload solutions.
+Using git allows you to monitor and control your changes to files and using GitLab
+as version control platform allows us to easily view and comment on submitted
+exercises.
+
 ## How to submit an exercise solution
 
 Solutions to exercises can be submitted to the tutorial repository in order to get
-the reviewed. We follow a classical development pattern: 1. create a new branch
+it reviewed. We follow a classical development pattern: 1. create a new branch
 for your changes (the new solutions), 2. upload that branch to the repository and
 create a Merge request, 3. One of the submissions is merged by the Tutor after
 the review phase.
@@ -15,7 +22,7 @@ start from the latest state.
 
 If something goes wrong, you first should check the status of your local repo, using
 `git status` and see in which branch you are and which files are changed or unstaged.
-You can revert changes or renamed branches easily. See the git reference/tutorial
+You can revert changes or rename branches easily. See the git reference/tutorial
 for details.
 
 ### Submission procedure
@@ -26,10 +33,11 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
    all your local changes, change to the master branch, and pull any updates:
 
    ```bash
-   git status                                    # optional. See any modified and unstaged files
-   git add <files>... && git commit -m "<note>"  # optional. Commit changes
-   git checkout master
-   git pull
+   git status                 # optional: See any modified and unstaged files
+   git add <files>...         # optional: Add changed/unstaged files to staging area
+   git commit -m "<note>"     # optional: Commit changes with log message "<note>"
+   git checkout master        # Change to the master branch
+   git pull                   # Download all remote changes and merge with master branch
    ```
 
 1. Create a new branch for each exercise. The name of that branch must be
@@ -78,6 +86,14 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
 Use the directory `sandbox/` for experiments to store files that should not be
 uploaded to the repository at all. This directory is *ignored* in the `.gitignore`
 file and will thus not be put in the staging area and not be commited.
+
+## Introduction to Git
+
+If you are not familiar with [Git](https://git-scm.com/docs) or [GitLab](https://docs.gitlab.com/)
+you can find an introduction either on
+- [Pro Git](https://git-scm.com/book) Online book
+- [Oh my Git!](https://ohmygit.org/) An open source game about learning Git!
+- [Git Cheat Sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf)
 
 ## FAQ
 
