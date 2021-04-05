@@ -3,6 +3,8 @@ stages:
   - build
   - test
 
+image: registry.dune-project.org/docker/ci/ubuntu:20.04
+
 branch-conformity:
   stage: conformity
   script:
