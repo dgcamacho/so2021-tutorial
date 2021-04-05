@@ -49,17 +49,17 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
    ```
 
 2. Add your solution to the corresponding exercise solution folder, `exercise<nr>/`,
-   in form of source fildes and header files, optionally a description file (e.g.
+   in form of source files and header files, optionally a description file (e.g.
    a markdown file), and optionally a *Makefile* or *CMakeLists.txt* (see later exercises).
 
-3. Add your added files to your local repository using `git add` and `git commit`:
+3. Add your modified files to your local repository using `git add` and `git commit`:
 
    ```bash
    git add file1 file2 file3...
    git commit -m "description of what is submitted/changed"
    ```
 
-4. Continue the development of the solution and repeat steps 3 and 4 until finished
+4. Continue the development of the solution and repeat steps 3 and 4 until finished.
 
 5. Push your changes to the online repository.
 
@@ -73,13 +73,19 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
    `<identity>/exercise<nr>`, click on *Merge request*. In the title, add the
    exercise number and your name, e.g. "Exercise 4: Simon Praetorius". Add a
    meaningful description of what you have done. This may include details on how
-   to run and test your code. Choose the tutor (@spraetor) as *Reviewer*
+   to run and test your code. Finally, choose the tutor (@spraetor) as *Reviewer*.
 
 7. In case you want to test the Merge request procedure, but do not yet want to
    get a review, or if you are in the process of developing your solution, add
    the prefix "WIP:" (Work-In-Progress) or "Draft:" to the title. This can be
    changed when ready using the button "Mark as ready" or by removing the prefix
    from the title.
+
+8. You will get comments in the code and in the Merge Request as review. This can
+   help you improve your programming skills and the quality of your future
+   submissions. One of the submissions is selected to be merged into the master
+   branch, or a reference solution if none fulfils the requirements of a proper
+   solution. You may get asked to improve your submission.
 
 ## Sandbox directory
 

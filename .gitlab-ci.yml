@@ -24,12 +24,12 @@ directory-conformity:
     - |
       ALLOWED_FILES="README.md;.gitignore;.gitlab-ci.yml"
       ALLOWED_DIRS=".;..;sandbox"
-      for entry in ./*; do
-        if [[ -f $entry ]] && [[ ! "$ALLOWED_FILES" =~ "${entry/;/:}" ]]; then
+      for entry in "./*"; do
+        if [[ -f "$entry" ]] && [[ ! "$ALLOWED_FILES" =~ "${entry/;/:}" ]]; then
           echo "File $entry not allowed in the root directory."
           exit 1
         fi
-        if [[ -d $entry ]] && [[ ! $ALLOWED_DIRS" =~ "${entry/;/:}" ]]; then
+        if [[ -d "$entry" ]] && [[ ! "$ALLOWED_DIRS" =~ "${entry/;/:}" ]]; then
           if [[ ! "$entry" =~ ^exercise[0-9]+ ]]; then
             echo "Directory $entry not in valid naming format. Must be exercise<nr>/"
             exit 1
