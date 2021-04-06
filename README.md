@@ -7,6 +7,7 @@ Using git allows you to monitor and control your changes to files and using GitL
 as version control platform allows us to easily view and comment on submitted
 exercises.
 
+
 ## How to submit an exercise solution
 
 Solutions to exercises can be submitted to the tutorial repository in order to get
@@ -87,11 +88,44 @@ Please follow the steps carefully. If any questions arise, ask in the matrix cha
    branch, or a reference solution if none fulfils the requirements of a proper
    solution. You may get asked to improve your submission.
 
+
+## Style Guidelines
+All programs you submit should follow basic programming rules like the following:
+
+- **Formatting**
+  - Put each instruction on a separate line (two lines if it is very large)
+  - Use spaces to separate variable names, functions and operators
+  - Indent your lines to visually mark different lines belonging to different scopes
+- **Variable names**
+  - The name should reflect the purpose of the variable
+  - Variable names start with a lowercase letter, types with an uppercase letter
+  - The rest of the name format for identifiers is up to you
+  - Simple counting integers and similar variables are exceptions
+- **Comments**
+  - Comments allow others to understand your intentions
+  - Tutors can only give you points if they understand what you were trying to do
+  - *Guideline:* one comment per class, per function, per algorithm subtask, per tricky or "exotic" source line
+  - Don't comment to much either, this may visually drown the actual code or diverge from what is actually coded (!)
+  - Leave out trivial comments ("This is the constructor")
+- **Language constructs**
+  - You may use any construct you want, even if it has not yet been introduced in the lecture
+  - Avoid constructs that have been superseded by better alternatives in the lecture
+  - Declare variables and references as `const` where it is possible
+  - Separate interface and implementation by correctly using public and private
+  - Use smart pointers instead of raw pointers once the lecture has introduced them
+
+Optionally, see [Google C++ Style Guide](http://google.github.io/styleguide/cppguide.html) for
+more rules and guidelines on the coding style. Also, see the
+[C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md)
+for a comprehensive list of best practice programming rules for C++.
+
+
 ## Sandbox directory
 
 Use the directory `sandbox/` for experiments to store files that should not be
 uploaded to the repository at all. This directory is *ignored* in the `.gitignore`
 file and will thus not be put in the staging area and not be commited.
+
 
 ## Introduction to Git
 
@@ -100,6 +134,7 @@ you can find an introduction either on
 - [Pro Git](https://git-scm.com/book) Online book
 - [Oh my Git!](https://ohmygit.org/) An open source game about learning Git!
 - [Git Cheat Sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf)
+
 
 ## FAQ
 
