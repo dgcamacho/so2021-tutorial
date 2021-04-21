@@ -31,12 +31,13 @@ Create your own *cheat sheet* as Markdown `.md` file and store it in the `scprog
 ## Exercise 1 (Introduction to Git)
 This exercise serves as an introduction to [Git](https://www.git-scm.com/) and [GitLab](https://gitlab.mn.tu-dresden.de).
 Please perform the following tasks in a private repository. Below the lists of tasks is a list of
-Git commands that might be useful.
+Git commands that might be useful. If you do not have a GitLab account on [gitlab.mn.tu-dresden.de](https://gitlab.mn.tu-dresden.de),
+please register yourself on [gitlab.com](https://gitlab.com) and work in a private repository there.
 
-Perform the following tasks, and document which Git command you have used, briefly describing
+Perform the following tasks and document which Git command you have used briefly describing
 its purpose:
 - Create a new folder on your computer, and *initialize* a new Git repository inside.
-- Put a text file into the repository (its contents don't matter, you could take one of the source
+- Put a text file into the repository (its contents doesn't matter, you could take one of the source
   files of the lecture), *add* it to the files tracked by Git, and *commit* your changes to the repository,
   using a meaningful commit message.
 - Check that your commit was successful by reading the *log* file, and take a look at the status of
@@ -71,7 +72,7 @@ existing (non-Git) folders.
 
 This exercise has left out several important Git concepts, but should suffice as a starting point for
 those who have not used Git before. There are also several tabs in
-GitLab that might be useful, e.g. the "Commits" and "Graph" tabs under "Repository", the "Issues"
+GitLab that might be useful, e.g., the "Commits" and "Graph" tabs under "Repository", the "Issues"
 and "Todos" tabs, and the "Wiki" tab. If and how you use these features is up to you.
 
 ### List of Git commands:
@@ -80,6 +81,7 @@ and "Todos" tabs, and the "Wiki" tab. If and how you use these features is up to
 `git stash`, `git status`, `git stash pop`, `git checkout -b <branch>`, `git branch`
 
 ### Resources
+- [Oh my Git!](https://ohmygit.org/) An open source game about learning Git!
 - [Git manual](https://www.git-scm.com/book/en/v2)
 - [Git reference](https://www.git-scm.com/docs)
 - [cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf)
@@ -88,7 +90,8 @@ and "Todos" tabs, and the "Wiki" tab. If and how you use these features is up to
 ## Exercise 2 (Compiling code)
 
 In the directory [material/](/exercise1/material) you can find
-an initial C++ example in the files `linear_algebra.cc`, `linear_algebra.h`, and `exercise2.cc`. Download the files and compile the code:
+an initial C++ example in the files `linear_algebra.cc`, `linear_algebra.h`, and `exercise2.cc`. Download
+the files and compile the code:
 
 ```bash
 c++ -std=c++14 -Wall -O2 -c linear_algebra.cc
@@ -106,8 +109,8 @@ Familiarize yourself with the options passed to the compiler `c++`, i.e. `-std=c
 the implications of these flags? Sometimes the option has an argument. Change the value (if meaningful), compile and run again.
 What is the effect? What is the minimal necessary set of options to pass?
 
-Document the output, results, and findings, write it into a file `solution.txt` or `solution.md` and commit into your repository. Follow the
-instructions given in the [README.md](/README.md) of this repository.
+What is the version and name of your c++ compiler? Try to find out by calling `c++` with an appropriate
+argument.
 
 ### Resources
 You can find a documentation of the compiler arguments on
@@ -117,8 +120,8 @@ You can find a documentation of the compiler arguments on
 ## Exercise 3 (Basic debugging)
 
 In the [material/](/exercise1/material) directory, you can
-find a second exercise code for this exercise sheet, i.e. the file `exercise3.cc`.
-Download and compile again, but this time with debug options `-Og -g` instead of `-O2`.
+find another exercise code for this exercise sheet, i.e., the file `exercise3.cc`.
+Compile the code, but this time with debug options `-Og -g` instead of `-O2`.
 Run the code! What happens? The program should produce an error.
 
 In order to find the error(s) start the program in a debugger:
