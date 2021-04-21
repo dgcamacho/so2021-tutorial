@@ -103,9 +103,9 @@ start from the latest state.
    `<identity>/exercise<nr>`, and click on *Merge request*. In the title, add the
    exercise number and your name, e.g. "Exercise 4: Simon Praetorius". Add a
    meaningful description of what you have done. This may include details on how
-   to run and test your code. Finally, choose the tutor (@spraetor) as *Reviewer*.
+   to run and test your code. We will assign a *Reviewer* to your submission.
 
-   The title again is important for us to identity your submission.
+   A proper title of the Merge Request is **important** for us to identity your submission.
 
 7. In case you want to test the Merge request procedure, but do not yet want to
    get a review, or if you are in the process of developing your solution, add
@@ -116,8 +116,14 @@ start from the latest state.
 8. You will get comments in the code and in the Merge Request as review. This helps to
    improve your programming skills and the quality of your future submissions.
 
-   We will select one of the submissions to be merged into the master branch. In this
-   way we build up a collection of reference solutions for all the exercises.
+   In the review, we will comment directly in your code, using the GitLab facilities.
+   You will get notified if any new comments are added to your merge request. When we are
+   finished with the review, you will get a thumb up or a final comment and we will close
+   the merge request you have opened. (Closing the MR means it is finished, not that it is
+   rejected or anything).
+
+   We will select one of the submissions to be merged into the master branch, instead of
+   closing it. In this way we build up a collection of reference solutions for all the exercises.
 
 
 ## Style Guidelines
