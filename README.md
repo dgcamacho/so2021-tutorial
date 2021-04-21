@@ -167,6 +167,53 @@ you can find an introduction either on
 - [Git Cheat Sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf)
 - [Version control in VS Code](https://code.visualstudio.com/docs/introvideos/versioncontrol)
 
+
+## Linux Basics
+
+In general, we recommend to work in a Linux based environment, since this is the environment of scientific
+computing that many researchers worldwide are using. It is the environment we can give assistance and
+that provides all libraries and runtime environments in a very simple way. In case you want to work on
+MS Windows, there are two options:
+
+1. Use the WSL (Windows Subsystem for Linux) to get a Linux environment directly in your Windows system
+   (https://docs.microsoft.com/de-de/windows/wsl/install-win10)
+2. Use a Virtual Machine, e.g. Virtual Box, to install a full Linux running like an application in your
+   Windows (https://www.virtualbox.org)
+
+If you want to use MacOS, this is fine since there is a common base with Linux, but we cannot give much
+assistance on this.
+
+Some additional information if you are not familiar with Linux:
+- https://www.selflinux.org (in German)
+- [Command-line Tutorial](tutorials.ubuntu.com/tutorial/command-line-for-beginners),
+  [Devhints](devhints.io/),
+  [Cheat Sheet](appletree.or.kr/quick_reference_cards/Unix-Linux/Linux%20Command%20Line%20Cheat%20Sheet.pdf)
+
+
+## Editors and IDEs
+
+To start programming you need a source-code editor. While it is perfectly fine to use a very simple
+text editor, like *gedit* or *kate*, we recommend to use an editor optimized for code development.
+There are many available editors for all desires, but to trigger collaborative development, we suggest
+to work with a code editor that is available on all platforms, e.g., *VS Code*. The choice is slightly
+biased, but follows a preference of many developers worldwide. The reasons, we recommend this editor,
+are manifold: it is open-source, platform independent, light-weight, highly extensible, allows easy
+collaborative development, git, docker and WSL integration.
+- Download and installation instructions: https://code.visualstudio.com
+- Information regarding working with vscode and WSL on Windows:
+   * https://code.visualstudio.com/docs/remote/wsl
+   * https://code.visualstudio.com/docs/remote/wsl-tutorial
+   * https://www.golem.de/news/visual-studio-code-wie-docker-mit-wsl-2-funktioniert-2011-151327.html
+- Install the C/C++ Extension for comfortable development of C++ code
+
+Alternative recommendations:
+- [CLion](https://www.jetbrains.com/de-de/clion/)
+- [Sublime Text](https://www.sublimetext.com/)
+- [Atom](https://atom.io/)
+
+If you want to use your own editor of choice, this is perfectly fine.
+
+
 ## FAQ
 
 Here questions and answers will be collected for common problems. A general
