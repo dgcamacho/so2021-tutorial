@@ -3,6 +3,7 @@
 ## Exercise 0 (Introduction to Linux command line)
 This exercise serves as introduction to the Linux command line. If your are not yet familiar with
 the Linux terminal, please perform the following tasks on your local machine:
+
 - Open the terminal
 - Change to the `Desktop` directory
 - Create a new directory `scprog`
@@ -36,6 +37,7 @@ please register yourself on [gitlab.com](https://gitlab.com) and work in a priva
 
 Perform the following tasks and document which Git command you have used briefly describing
 its purpose:
+
 - Create a new folder on your computer, and *initialize* a new Git repository inside.
 - Put a text file into the repository (its contents doesn't matter, you could take one of the source
   files of the lecture), *add* it to the files tracked by Git, and *commit* your changes to the repository,
@@ -133,6 +135,7 @@ gdb ./exercise3
 This will open a terminal program with a command line interface to enter GDB commands.
 
 Some important commands, sufficient for this exercise, are:
+
 - `run`  (or `r`) `<arguments>`: start the program with given arguments, if any
 - `break` (or `b`) `<file:line, file:function>`: to set a breakpoint at specific location
 - `backtrace` (or `bt`): show hierarchy of called functions
