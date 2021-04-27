@@ -1,6 +1,6 @@
 # Exercise sheet 1
 
-## Exercise 0 (Introduction to Linux command line)
+## Task 0 (Introduction to Linux command line)
 This exercise serves as introduction to the Linux command line. If your are not yet familiar with
 the Linux terminal, please perform the following tasks on your local machine:
 - Open the terminal
@@ -28,7 +28,7 @@ Create your own *cheat sheet* as Markdown `.md` file and store it in the `scprog
 - [Markdown](https://daringfireball.net/projects/markdown/), [Markdown@GitLab](https://docs.gitlab.com/ee/user/markdown.html)
 
 
-## Exercise 1 (Introduction to Git)
+## Task 1 (Introduction to Git)
 This exercise serves as an introduction to [Git](https://www.git-scm.com/) and [GitLab](https://gitlab.mn.tu-dresden.de).
 Please perform the following tasks in a private repository. Below the lists of tasks is a list of
 Git commands that might be useful. If you do not have a GitLab account on [gitlab.mn.tu-dresden.de](https://gitlab.mn.tu-dresden.de),
@@ -87,22 +87,22 @@ and "Todos" tabs, and the "Wiki" tab. If and how you use these features is up to
 - [cheat sheet](https://github.github.com/training-kit/downloads/github-git-cheat-sheet.pdf)
 
 
-## Exercise 2 (Compiling code)
+## Task 2 (Compiling code)
 
 In the directory [material/](/exercise1/material) you can find
-an initial C++ example in the files `linear_algebra.cc`, `linear_algebra.h`, and `exercise2.cc`. Download
+an initial C++ example in the files `linear_algebra.cc`, `linear_algebra.h`, and `task2.cc`. Download
 the files and compile the code:
 
 ```bash
 c++ -std=c++14 -Wall -O2 -c linear_algebra.cc
-c++ -std=c++14 -Wall -O2 -c exercise2.cc
-c++ -o exercise2 linear_algebra.o exercise2.o
+c++ -std=c++14 -Wall -O2 -c task2.cc
+c++ -o task2 linear_algebra.o task2.o
 ```
 
-This creates a new file `exercise2` in the current directory. You can now run the example by
+This creates a new file `task2` in the current directory. You can now run the example by
 
 ```bash
-./exercise2
+./task2
 ```
 
 Familiarize yourself with the options passed to the compiler `c++`, i.e. `-std=c++14`, `-Wall`, `-O2`, `-c`, and `-o`. What are
@@ -117,17 +117,17 @@ You can find a documentation of the compiler arguments on
 - [GCC manual](https://gcc.gnu.org/onlinedocs/gcc-7.2.0/gcc/)
 
 
-## Exercise 3 (Basic debugging)
+## Task 3 (Basic debugging)
 
 In the [material/](/exercise1/material) directory, you can
-find another exercise code for this exercise sheet, i.e., the file `exercise3.cc`.
+find another exercise code for this exercise sheet, i.e., the file `task3.cc`.
 Compile the code, but this time with debug options `-Og -g` instead of `-O2`.
 Run the code! What happens? The program should produce an error.
 
 In order to find the error(s) start the program in a debugger:
 
 ```bash
-gdb ./exercise3
+gdb ./task3
 ```
 
 This will open a terminal program with a command line interface to enter GDB commands.
