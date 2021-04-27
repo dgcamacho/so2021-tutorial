@@ -11,13 +11,13 @@ int main(int argc, char** argv)
 
   // system matrix
   DenseMatrix A;
-  laplacian_setup(A,n,n);
+  laplacian_setup(A,n, 1);
 
   // solution vector
   DenseVector x(n);
 
   // iteration object with max_iter and rtol
-  BasicIteration iter(b, 0, 1.e-6, 0, 10);
+  BasicIteration iter(b, 100, 1.e-6, 0, 10);
 
   // solve the linear system using a conjugate-gradient algorithm
   int err = cg(A, x, b, iter);
