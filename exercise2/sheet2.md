@@ -146,6 +146,7 @@ Test your program with the following matrices with $`k= 20`$ iterations:
   data-structures discussed in the lecture or tutorial.
 - Depending on the data-structure, you might need to pass additional information (like the size) to the functions.
 - Remember: You cannot return directly raw arrays. Maybe you need to provide an output-parameter instead.
+- In order to compute the dot product and the norm add a corresponding function. The required `sqrt` function can be found in the include file `<cmath>` and is called `std::sqrt`.
 
 ### Submission
 This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
@@ -160,3 +161,4 @@ branch to the remote repository by `git push origin <zih-id>/exercise2`, 5. crea
 - [Rayleigh quotient](https://en.wikipedia.org/wiki/Rayleigh_quotient)
 - [Arrays](https://en.cppreference.com/w/c/language/array)
 - [std::rand](https://en.cppreference.com/w/cpp/numeric/random/rand)
+- [std::sqrt](https://en.cppreference.com/w/cpp/numeric/math/sqrt)
