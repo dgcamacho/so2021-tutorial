@@ -77,7 +77,7 @@ do
 while (n < 100);
 ```
 
-3. Write a C++-program that calculates and prints the sum of the first $`n`$ positive integers, i.e.
+3. Write a C++-program that calculates and prints the sum of the squares of the first $`n`$ positive integers, i.e.
 ```math
 1^2 + 2^2 + 3^2 + 4^2 + ... + n^2
 ```
