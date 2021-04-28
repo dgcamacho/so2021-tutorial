@@ -145,6 +145,7 @@ Test your program with the following matrices with $`k= 20`$ iterations:
 - To represent the matrix and vectors, either use a static (multi-dimensional) array or any of the other
   data-structures discussed in the lecture or tutorial.
 - Depending on the data-structure, you might need to pass additional information (like the size) to the functions.
+- Remember: You cannot return directly raw arrays. Maybe you need to provide an output-parameter instead.
 
 ### Submission
 This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
