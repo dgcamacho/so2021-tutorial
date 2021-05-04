@@ -151,8 +151,9 @@ void power_method(vector<vector <double>> const &A,
 int main()
 {
     std::srand(0);
-
-    vector<vector<double>> A{{4, -1, -1}, {0.5, 2, -1}, {0, 0, 1}};
-    power_method(A);
+    vector<vector<double>> B{{3, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    power_method(B);
+    vector<vector<double>> C{{4, -1, -1}, {0.5, 2, -1}, {0, 0, 1}};
+    power_method(C);
     return 0;
 }
