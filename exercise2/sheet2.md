@@ -154,7 +154,7 @@ page. In summary: 1. create a new branch `<zih-id>/exercise2`, 2. inside the fol
 your solution: `task4.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
 branch to the remote repository by `git push origin <zih-id>/exercise2`, 5. create a merge request.
 
-**Deadline for the submission: end of 2021/05/05**
+**Deadline for the submission: end of 2021/05/12**
 
 ### Resources
 - [Power iteration](https://en.wikipedia.org/wiki/Power_iteration)
