@@ -191,9 +191,9 @@ assistance on this.
 
 Some additional information if you are not familiar with Linux:
 - https://www.selflinux.org (in German)
-- [Command-line Tutorial](tutorials.ubuntu.com/tutorial/command-line-for-beginners),
-  [Devhints](devhints.io/),
-  [Cheat Sheet](appletree.or.kr/quick_reference_cards/Unix-Linux/Linux%20Command%20Line%20Cheat%20Sheet.pdf)
+- [Command-line Tutorial](https://tutorials.ubuntu.com/tutorial/command-line-for-beginners),
+  [Devhints](https://devhints.io/),
+  [Cheat Sheet](https://appletree.or.kr/quick_reference_cards/Unix-Linux/Linux%20Command%20Line%20Cheat%20Sheet.pdf)
 
 
 ## Editors and IDEs
