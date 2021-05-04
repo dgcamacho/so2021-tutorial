@@ -1,6 +1,7 @@
-#include <iostream>
-#include <cmath>
-#include <ctime>
+#include <algorithm>    // std::max
+#include <cmath>        // std::abs, std::sqrt
+#include <ctime>        // std::time
+#include <iostream>     // std::cout, std::endl
 
 /// Dot product `<r,s> = r^T * s`
 double dot (double const r[3], double const s[3])
@@ -17,6 +18,12 @@ void matvec (double const A[3][3], double const x[3], double y[3])
     for (int j = 0; j < 3; ++j)
       y[i] += A[i][j] * x[j];
   }
+}
+
+/// Return the maximum of the absolute values of the vector
+double abs_max (double const r[3])
+{
+  return std::max({std::abs(r[0]), std::abs(r[1]), std::abs(r[2])});
 }
 
 /// Return the Rayleigh quotient
@@ -41,8 +48,7 @@ double rayleigh_quotient (double const A[3][3], double const r[3])
 void find_initial_value (double const A[3][3], double r[3])
 {
   double s[3];
-  bool in_kernel = true;
-  while (in_kernel) {
+  do {
     // random integral values in the interval [-10, 10]
     r[0] = std::rand() % 20 - 10;
     r[1] = std::rand() % 20 - 10;
@@ -50,8 +56,8 @@ void find_initial_value (double const A[3][3], double r[3])
 
     // check whether vector is in ther kernel of the matrix
     matvec(A,r,s);
-    in_kernel = dot(s,s) < 1.e-10;
   }
+  while (abs_max(s) < 1.e-12);
 }
 
 /// Compute the error of the eigenvector approximation and print to cout
@@ -72,8 +78,8 @@ void test (double const A[3][3], double const r[3], double const sigma)
   s[2] -= sigma * r[2];
 
   std::cout << "r = [" << r[0] << ", " << r[1] << ", " << r[2] << "], "
-                "sigma = " << sigma << ", "
-                "err = " << std::sqrt(dot(s,s)) << std::endl;
+               "sigma = " << sigma << ", "
+               "err = " << std::sqrt(dot(s,s)) << std::endl;
 }
 
 /// Power iteration: `r^(k) = Ar^(k-1)/|Ar^(k-1)|`
