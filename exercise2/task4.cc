@@ -7,153 +7,148 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
-#include <cmath>                            // needed for std::sqrt; std::abs
+#include <cmath>  // needed for std::sqrt; std::abs
+#include <span>
 
+using std::fabs;
+using Vector = std::span<double>;
 
-using std::vector; using std::sqrt; using std::fabs;
-
-double two_norm(vector<double> const &vec)
-{   
-    // Calculates euclidian norm of a given vector.
-    double norm = 0;
-    for (auto &i : vec) 
-        norm += i*i;
-    return sqrt(norm);
+void printV(Vector const vec)
+{
+    for (int i = 0; i < vec.size(); ++i)
+        std::cout << vec[i] << std::endl;
 }
 
-double inf_norm(vector<double> const &vec)
+double &acces(double *Matrix, int const row, int const col, 
+              int const nrows=3, int const ncols=3)
 {
-    // Calculates the infinity norm ||vec||_inf = max_i(|v_i|) of a given
-    // vector.
-    double norm = 0;
-    for (auto &i : vec){
-        norm = (norm > double(fabs(i)) ? norm : double(fabs(i)));
-    }
+    return Matrix[row * nrows + col];
+}
+
+double* make_vector(int const size)
+{
+    return new double[size];
+}
+
+double* make_matrix(int const nrows, int const ncols)
+{
+    return new double[nrows * ncols];
+}
+
+double dot(Vector const vec1, Vector const vec2)
+{
+    assert(vec1.size() == vec2.size());
+    double result = 0.0;
+    for (int i = 0; i < vec1.size(); ++i)
+        result += vec1[i]*vec2[i];
+    return result;
+
+}
+
+double two_norm(double const value)
+{
+    return std::sqrt(value);
+}
+
+double inf_norm(Vector const vec)
+{
+    double norm = 0.0;
+    for (int i = 0; i < vec.size(); ++i)
+        norm = (norm > double(fabs(vec[i])) ? norm : double(fabs(vec[i])));
     return norm;
 }
 
-double dot(vector<double> const &vec1, vector<double> const &vec2)
+void mat_vec_mult(Vector const Matrix, Vector const vec, Vector result)
 {
-    // Returns the dot-product of two vectors of equal size.
-    assert(vec1.size() == vec2.size());
-
-    double scalar = 0;
-    for (decltype(vec1.size()) i = 0; i < vec1.size(); ++i)
-        scalar += vec1[i]*vec2[i];
-    return scalar;
-}
-
-vector<double> mat_vec_mult(vector<double> const &vec, 
-                            vector<vector <double>> const &A) 
-{
-    // Returns the product of an n x m matrix and a vector of dimension n, 
-    // yielding a vector of dimension m.
-    assert(vec.size() == A[0].size());
-
-    vector<double> rhs_vec(vec.size());
-    for (decltype(vec.size()) i = 0; i < vec.size(); ++i) {
-        for (decltype(A[0].size()) j = 0; j < A[0].size(); ++j) {
-            rhs_vec[i] += A[i][j]*vec[j];
-        }
+    assert(vec.size() == result.size());
+    for (int i = 0; i < vec.size(); ++i){
+        for (int j = 0; j < vec.size(); ++j)
+            result[i] += Matrix[i*vec.size() + j]
+                                *vec[j];
     }
-    return rhs_vec;
-
 }
 
-void scale_vec(vector<double> &vec, double const &scale)
+void axpy(double const alpha, Vector const vec1, Vector vec2)
 {
-    // Scales each entry of a given vector by a certain real value.
-    for (auto &i : vec) 
-        i /= scale;
-}
-
-vector<double> vec_substract(vector<double> const &vec1, 
-                             vector<double> const &vec2)
-{
-    // Given two vectors of equal size, this function returns the sub-
-    // traction of the two vectors. 
     assert(vec1.size() == vec2.size());
-    vector<double> vec_result(vec1.size());
-    for (decltype(vec1.size()) i = 0; i < vec1.size(); ++i)
-        vec_result[i] = vec1[i] - vec2[i]; 
-    return vec_result;
+    for (int i = 0; i < vec1.size(); ++i)
+        vec2[i] += alpha*vec1[i];
 }
-
-
-vector<double> find_initial_value(vector<vector <double>> const &A, 
-                          double const tol=1e-4) 
+        
+auto find_initial_value(Vector const A, int const ncols, int const nrows, 
+                        int const tol = 1e-4)
 {
-    // Given a n x m matrix, this function constructs a vector of dimension
-    // n, that is linearly independent of the matrix. The entries of the vector
-    // are filled with random variables that are uniformly distributed. 
-    vector<double> vec(A[0].size());
-    for (decltype(vec.size()) i = 0; i < vec.size(); ++i)
-        vec[i] = std::rand()/((RAND_MAX + 1u)/5.0);
-    auto rhs_vec = mat_vec_mult(vec, A);
-    if (!(std::abs(two_norm(rhs_vec) - tol) >= 0))
-        // ||A*vec||_2 = 0 iff A*vec = 0. This is not wanted -> new try
-        vec = find_initial_value(A);
-    return vec;
+    auto r0_data = make_vector(nrows);
+    for (int i = 0; i < nrows; ++i){
+        r0_data[i] = int(std::rand()/((RAND_MAX + 1u)/100.0));
+    }
+    auto r0 = Vector(r0_data, nrows);
+    auto mult = Vector(make_vector(nrows), nrows);
+    mat_vec_mult(A, r0, mult);
+    assert((std::abs(two_norm(dot(mult, mult)) - tol) >= 0));
+    return r0;
 }
 
-
-void print_vec(vector<double> const &vec) 
-{
-    // Simple function to write entries of vector to ostream
-    for (auto &i : vec)
-        std::cout << i << std::endl;
-}
-
-double rayleigh_quotient(vector<vector <double>> const &A, 
-                        vector<double> const &vec)
-{
-    return dot(vec, mat_vec_mult(vec, A))/dot(vec , vec);
-}
-
-
-vector<double> approx_rvec(vector<double> const &vec, 
-                 vector<vector <double>> const &A)
-{
-    // Approximates the eigenvalue of a given matrix A in the k-th 
-    // iteration.
-    vector<double> vec_tmp = mat_vec_mult(vec, A);
-    scale_vec(vec_tmp, two_norm(vec_tmp));
-    return vec_tmp;
-}
-double test(vector<vector <double>> const& A, 
-                      vector<double> vec, double const sigma)
+void scale(Vector vec, double const alpha)
 {   
-    // Calculates the error of the implemented power method in the infinity
-    // norm. 
-    vector<double> vec_mult = mat_vec_mult(vec, A);
-    scale_vec(vec, 1/sigma);
-    double error = inf_norm(vec_substract(vec_mult, vec));
+    for (int i = 0; i < vec.size(); ++i)
+        vec[i] *= alpha;
+}
+
+void approx_rk(Vector const Matrix, Vector vec)
+{
+    mat_vec_mult(Matrix, vec, vec);
+    double scaling = two_norm(dot(vec, vec));
+    scale(vec, 1/scaling);
+}
+
+double rayleigh_quotient(Vector const Matrix, Vector const vec)
+{
+    auto mult = Vector(make_vector(vec.size()), vec.size());
+    mat_vec_mult(Matrix, vec, mult);
+    return dot(vec, mult)/dot(vec, vec);
+}
+
+double test(Vector const Matrix, Vector const vec, double const sigma)
+{
+    auto mult = Vector(make_vector(vec.size()), vec.size());
+    mat_vec_mult(Matrix, vec, mult);
+    scale(vec, sigma);
+    axpy(-1.0, vec, mult);
+    double error = inf_norm(mult);
     return error;
 }
 
-void power_method(vector<vector <double>> const &A, 
-                    unsigned const k=20)
-{   
-    // Iterates over a given number of iteration steps and calculates the 
-    // largest eigenvalue and the corresponding eigenvector of a given 
-    // positive-definit matrix A in each step. 
-    vector<double> r_k = find_initial_value(A);
-    double sigma = 0;
-    for (int i = 1; i <= k; ++i){
-        r_k = approx_rvec(r_k, A);
-        sigma = rayleigh_quotient(A, r_k);
-        std::cout << "The Rayleigh-Quotient in the step k=" << i << 
+void power_method(Vector const A, int const nrows, int const ncols, 
+                  int const k=20)
+{
+    auto rk = find_initial_value(A, nrows, ncols);
+    double sigma = 0.0;
+    for (int i = 0; i <= k; ++i){
+        approx_rk(A, rk);
+        double sigma = rayleigh_quotient(A, rk);
+        std::cout << "The estimated Rayleigh-quotient in step k=" << i <<
                      " is " << sigma << std::endl;
-        std::cout << "The Error is " << test(A, r_k, sigma) << std::endl;
+        std::cout << "The error is " << test(A, rk, sigma) << std::endl;
+
+        
     }
 }
 
 int main()
 {
     std::srand(0);
-    vector<vector<double>> B{{3, 0, 0}, {0, 1, 0}, {0, 0, 1}};
-    power_method(B);
-    vector<vector<double>> C{{4, -1, -1}, {0.5, 2, -1}, {0, 0, 1}};
-    power_method(C);
+
+    std::size_t const n = 3;
+    std::size_t const m = 3;
+
+    double mat[n*m] = {3, 0, 0, 0, 1, 0, 0, 0, 1};
+
+    auto matrix = make_matrix(n, m);
+    auto A = Vector(mat, n*m);
+
+
+    power_method(A, n, m);
+
     return 0;
 }
