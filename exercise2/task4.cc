@@ -20,6 +20,7 @@ void printV(Vector const vec)
         std::cout << vec[i] << std::endl;
 }
 
+// copies entries of one vector into another without copying memory adress
 void cpV(Vector const vec1, Vector vec2)
 {
     assert(vec1.size() == vec2.size());
@@ -120,10 +121,12 @@ void scale(Vector vec, double const alpha)
 
 // calculates approximation of a potential eigenvector in the k-th iteration
 void approx_rk(Vector const Matrix, Vector vec)
-{   
-    mat_vec_mult(Matrix, vec, vec);
-    double scaling = two_norm(dot(vec, vec));
-    scale(vec, 1/scaling);
+{  
+    auto v_scale = Vector(make_vector(vec.size()), vec.size());
+    mat_vec_mult(Matrix, vec, v_scale);
+    double scaling = two_norm(dot(v_scale, v_scale));
+    scale(v_scale, 1/scaling);
+    cpV(v_scale, vec);
 }
 
 // calculates the rayleigh-quotient of a given matrix and a given vector
@@ -178,7 +181,7 @@ int main()
     auto B = Vector(mat1, n*m);
     auto C = Vector(mat2, n*m);
 
-    //power_method(B, n, m);
+    power_method(B, n, m);
     power_method(C, n, m);
     return 0;
 }
