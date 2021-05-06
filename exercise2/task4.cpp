@@ -6,13 +6,18 @@
 
 using std::vector;
 
+double dot(vector<double> const &vec1, vector<double> const &vec2){
+    assert(vec1.size() == vec2.size());
+    double scalar = 0;
+    for (decltype(vec1.size()) i = 0; i < vec1.size(); i++){
+        scalar += vec1[i] * vec2[i];
+    }
+    return scalar;
+}
+
 auto two_norm(vector<double> const &vec) -> double
     {
-        using std::sqrt;
-        double result = 0;
-        for (auto const& d : vec)
-            result += d * d;
-        return sqrt(result);
+        return std::sqrt(dot(vec, vec));
     }
 
 auto inf_norm(vector<double> const &vec) -> double{
@@ -26,15 +31,6 @@ auto inf_norm(vector<double> const &vec) -> double{
 auto inf_norm_stackoverflow(vector<double> const &vec) -> double{
     // Return the inf norm to test conversion
     return *max_element(std::begin(vec), std::end(vec));
-}
-
-double dot(vector<double> const &vec1, vector<double> const &vec2){
-    assert(vec1.size() == vec2.size());
-    double scalar = 0;
-    for (decltype(vec1.size()) i = 0; i < vec1.size(); i++){
-        scalar += vec1[i] * vec2[i];
-    }
-return scalar;
 }
 
 auto find_initial_value(vector<vector<double>> &A) -> vector<double>{
@@ -99,13 +95,13 @@ auto test(vector<vector<double>> &A, vector<double> &r, double &sigma) -> double
     return inf_norm_stackoverflow(difference);
 }
 
-auto power_method(vector<vector<double>> &A, int const k) -> void{
+auto power_method(vector<vector<double>> &A, int const k = 10) -> void{
     vector<double> r = find_initial_value(A);
     for(int i = 0; i < k; ++i){
         r = approximate_r_vector(A, r);
         double sigma = rayleigh_quotient(A, r);
         std::cout << "Iteration " << i << std::endl;
-        std::cout << "Ray " << sigma << std::endl;
+        std::cout << "Largest Eigenvalue " << sigma << std::endl;
         std::cout << "Error norm " << test(A, r, sigma) << std::endl << std::endl;
     }
 }
