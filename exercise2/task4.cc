@@ -98,7 +98,7 @@ void axpy(double const alpha, Vector const vec1, Vector vec2)
 //finds the initial approximation of a potential eigenvector. This initial
 //approximation should be linearly independent, thus A*r0 != 0.
 auto find_initial_value(Vector const A, int const ncols, int const nrows, 
-                        int const tol = 1e-12)
+                        double const tol = 1e-12)
 {
     auto r0_data = make_vector(nrows);
     for (int i = 0; i < nrows; ++i){
