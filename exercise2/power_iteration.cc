@@ -3,16 +3,16 @@
 #include <ctime>
 
 // calculate a matrix vector product
-void product(int n, double* A, double r[], double p[] ) {
+void product(int n, double* A, double r[], double product_vec[] ) {
     for (int i = 0; i < n; i++) {
-        p[i] = 0;
+        product_vec[i] = 0;
         for (int j = 0; j <n; j++) {
-            p[i] += A[i*n+j] * r[j];
+            product_vec[i] += A[i*n+j] * r[j];
         }
     }
 }
 
-// calculate the dot product of two 1d vectors
+// calculate the dot product of two 1D vectors
 double dot_product(int n, double u[], double v[]) {
     double dot_prod = 0.0;
     for (int i = 0; i < n; i++) {
@@ -23,9 +23,9 @@ double dot_product(int n, double u[], double v[]) {
 
 // calculate the rayleigh quotient
 double rayleigh_quotient(int n, double* A, double r[]) {
-    double p[n] = {};
-    product(n, A ,r, p);
-    return dot_product(n, r, p) / dot_product(n, r, r);
+    double product_vec[n] = {};
+    product(n, A ,r, product_vec);
+    return dot_product(n, r, product_vec) / dot_product(n, r, r);
 }
 
 // test if a vector is not equal to the zero vector
@@ -46,13 +46,14 @@ void find_initial_value(int n, double* A, double r[]) {
         for (int i = 0; i < n; i++) {
             r[i] = std::rand();
         }
-        double p[n] = {};
-        product(n, A,r,p);
-        if (not_trivial(n, p))
+        double product_vec[n] = {};
+        product(n, A, r, product_vec);
+        if (not_trivial(n, product_vec))
             break;
     }
 }
 
+// calculate the euclidean norm of a 1D vector
 double euclidean_norm(int n, double v[]) {
     double norm = 0;
     for (int i = 0; i < n; i++) {
@@ -61,6 +62,7 @@ double euclidean_norm(int n, double v[]) {
     return std::sqrt(norm);
 }
 
+// compute and print the approximation error in the 2-norm
 void test(int n, double* A, double r[], double sigma) {
     double product_vec[n], result_vec[n];
     product(n, A, r, product_vec);
@@ -69,13 +71,14 @@ void test(int n, double* A, double r[], double sigma) {
     std::cout << "\nEuclidean norm: " << euclidean_norm(n, result_vec) << "\n";
 }
 
+// find the approximated eigenvector
 void power_method(int n, double* A, int k) {
     double r[n], r1[n];
     double sigma;
     find_initial_value(n, A, r);
     for (int i = 0; i < k; i++) {
         product(n, A, r, r1);
-        int norm = euclidean_norm(n, r1);
+        double norm = euclidean_norm(n, r1);
         for (int j = 0; j < n; j++) {
             r[j] = r1[j]/norm;
         }
@@ -83,6 +86,7 @@ void power_method(int n, double* A, int k) {
         std::cout << "Rayleigh quotient = " << sigma << "\n";
     }
     std::cout << "approximated eigenvector: (" << r[0] << ", " << r[1] << ", " << r[2] << ")\n";
+
     test(n, A, r, sigma);
 }
 
@@ -112,6 +116,5 @@ int main() {
             std::cin >> k;
         }
         power_method(n, A, k);
-
     }
 }
