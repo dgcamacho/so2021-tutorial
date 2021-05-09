@@ -20,7 +20,6 @@
  * 2) Do I have to deallocate the allocated memory of std::vector?
  */ 
 
-
 #include <iostream>
 #include <cmath>
 #include <vector>
