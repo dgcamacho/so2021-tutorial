@@ -101,7 +101,7 @@ which follows from the property $`\varepsilon^2 = 0`$ and the fact that multipli
     { 1\cdot (\varepsilon \cdot \varepsilon )=1\cdot 0=0=\varepsilon \cdot \varepsilon =(1\cdot \varepsilon )\cdot \varepsilon }
 ```
 
-4. Compute the follow polynomial expressions for $`\tilde{x}=a + b\varepsilon`$:
+4. Compute the following polynomial expressions for $`\tilde{x}=a + b\varepsilon`$:
 
 ```math
 f(\tilde{x}) = 5\tilde{x}^4-2\tilde{x}^2+7
