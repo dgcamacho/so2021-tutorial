@@ -1,12 +1,16 @@
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
+// 1. data type for dual numbers
 struct DualNumber
 {
     double a;
     double b;
 };
 
+// 2. Operations
+/*
 DualNumber add (DualNumber x, DualNumber y) {
     DualNumber result;
     result.a = x.a + y.a;
@@ -41,6 +45,7 @@ DualNumber div (DualNumber x, DualNumber y) {
     result.b = (x.b * y.a - x.a * y.b) / (y.a * y.a);
     return result;
 }
+*/
 
 DualNumber operator+ (DualNumber x, DualNumber y) {
     DualNumber result;
@@ -71,12 +76,12 @@ DualNumber operator* (double alpha, DualNumber x) {
 }
 
 
-void print (DualNumber x) {
-    std::cout << "(" << x.a << ", " << x.b << ")";
+void print (DualNumber x, std::string message = "") {
+    std::cout << message << "(" << x.a << ", " << x.b << ")\n";
 }
 
 bool equal (DualNumber x, DualNumber y) {
-    return x.a == y.a && x.b == y.b;
+    return std::abs(x.a - y.a) < std::numeric_limits<double>::epsilon() && std::abs(x.b - y.b) < std::numeric_limits<double>::epsilon();
 }
 
 DualNumber f (DualNumber x) {
@@ -99,26 +104,24 @@ int main() {
     const DualNumber eps = {0,1};
     const DualNumber zero = {0,0};
 
-    print(one);
-    print(eps);
-
     // test the given identities
-    std::cout << "First equation: " << (equal(one * eps, eps * one) && equal(one * eps, eps)) << std::endl;
-    
-    std::cout << "Second equation: " << (equal(one * (one * eps), eps) && equal(eps,  one * eps) && equal(eps,  (one * one) * eps)) << std::endl;
-    
-    std::cout << "Third equation: " << (equal(one * (eps * eps), one * zero) && equal(one * zero, zero) && equal((1 * eps) * eps, zero) && equal(eps * eps, zero)) << std::endl;
+    /*
+    std::cout << "1st equation: " << (equal(one * eps, eps * one) && equal(one * eps, eps)) << std::endl;
+    std::cout << "2nd equation: " << (equal(one * (one * eps), eps) && equal(eps,  one * eps) && equal(eps,  (one * one) * eps)) << std::endl;
+    std::cout << "3rd equation: " << (equal(one * (eps * eps), one * zero) && equal(one * zero, zero) && equal((1 * eps) * eps, zero) && equal(eps * eps, zero)) << std::endl;
+    */
 
-    // 4.
+    assert((equal(one * eps, eps * one) && equal(one * eps, eps)));
+    assert(equal(one * (one * eps), eps) && equal(eps,  one * eps) && equal(eps,  (one * one) * eps));
+    assert(equal(one * (eps * eps), one * zero) && equal(one * zero, zero) && equal((1 * eps) * eps, zero) && equal(eps * eps, zero));
+    
+    // 4. evaluate the function f at x
     DualNumber x = {3,1};
-
-    std::cout << "f("; print(x); std::cout << ") = ";
-    print(f(x));
-    std::cout << "\n";
-    std::cout << "f'("; print(x); std::cout << ") = ";
-    print(deriv_f(x));    
-    std::cout << "\n";
-    
-
-
+    DualNumber a = {3,0};
+    print(x, "x = ");
+    print(f(x), "f(x) = ");
+    print(f(a), "f(a) = ");
+    print(deriv_f(a), "f'(a) = ");    
+    // first component of f(x) is equal to f(a) 
+    // second component of f(x) is equal to f'(a)
 }
