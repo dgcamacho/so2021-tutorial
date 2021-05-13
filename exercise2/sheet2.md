@@ -77,7 +77,7 @@ do
 while (n < 100);
 ```
 
-3. Write a C++-program that calculates and prints the sum of the first $`n`$ positive integers, i.e.
+3. Write a C++-program that calculates and prints the sum of the squares of the first $`n`$ positive integers, i.e.
 ```math
 1^2 + 2^2 + 3^2 + 4^2 + ... + n^2
 ```
@@ -145,6 +145,8 @@ Test your program with the following matrices with $`k= 20`$ iterations:
 - To represent the matrix and vectors, either use a static (multi-dimensional) array or any of the other
   data-structures discussed in the lecture or tutorial.
 - Depending on the data-structure, you might need to pass additional information (like the size) to the functions.
+- Remember: You cannot return directly raw arrays. Maybe you need to provide an output-parameter instead.
+- In order to compute the dot product and the norm add a corresponding function. The required `sqrt` function can be found in the include file `<cmath>` and is called `std::sqrt`.
 
 ### Submission
 This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
@@ -152,10 +154,11 @@ page. In summary: 1. create a new branch `<zih-id>/exercise2`, 2. inside the fol
 your solution: `task4.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
 branch to the remote repository by `git push origin <zih-id>/exercise2`, 5. create a merge request.
 
-**Deadline for the submission: end of 2021/05/05**
+**Deadline for the submission: end of 2021/05/12**
 
 ### Resources
 - [Power iteration](https://en.wikipedia.org/wiki/Power_iteration)
 - [Rayleigh quotient](https://en.wikipedia.org/wiki/Rayleigh_quotient)
 - [Arrays](https://en.cppreference.com/w/c/language/array)
 - [std::rand](https://en.cppreference.com/w/cpp/numeric/random/rand)
+- [std::sqrt](https://en.cppreference.com/w/cpp/numeric/math/sqrt)
