@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vector.hh"
 #include "DenseMatrix.hh"
+#include "Vector.hh"
 
 namespace scprog
 {
@@ -11,12 +11,12 @@ namespace scprog
     // decomposing the matrix m, without modifing it
     void compute (DenseMatrix const& m)
     {
-      // TODO: implement me!
+      /*...*/
     }
 
     void apply (Vector const& b, Vector& x) const
     {
-      // TODO: implement me!
+      /*...*/
     }
 
   private:
