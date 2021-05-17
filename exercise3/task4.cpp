@@ -4,6 +4,7 @@
 double const tolerance = 1e-12; // Value for absolute error in equality comparisons
 
 struct DualNumber {
+    /// Dual number consisting of real part 'a' and epsilon part 'b', which fulfils the property b*b=0.
     double a; // real part
     double b; // eps part
 
@@ -29,7 +30,6 @@ struct DualNumber {
     void print() const{
         std::cout << "Dual number " << this->a << " + " << this->b << " eps" << std::endl;
     }
-
 };
 
 DualNumber f(DualNumber x)
@@ -40,7 +40,7 @@ DualNumber f(DualNumber x)
     return five * x * x * x * x - (two * x * x) + seven;
 }
 
-DualNumber fPrime(DualNumber x)
+DualNumber f_prime(DualNumber x)
 {
     DualNumber twenty{20, 0};
     DualNumber four{4,0};
@@ -83,14 +83,14 @@ int main()
     assert(zero == (one * eps) * eps);
     assert(eps * eps == (one * eps) * eps);
 
+    // Function & derivative
     DualNumber const d{3, 1};
-    auto f_d = f(d);
-    auto f_prime_d = fPrime(d);
+
     std::cout << "Original dual number d: ";
     d.print();
     std::cout << "Polynomial 5x^4 - 2x^2 + 7 evaluated with a. f(d)= ";
-    f_d.print();
+    f(d).print();
     std::cout << "Derivative of polynomial evaluated with a. f'(d)= ";
-    f_prime_d.print();
+    f_prime(d).print();
     return 0;
 }
