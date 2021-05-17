@@ -17,14 +17,15 @@ algorithms in the following exercise sheets.
 
 1. A vector type representing the space $`\mathbb{R}^n`$ with dynamic dimension $`n\in\mathbb{N}`$
 2. A dense matrix type representing the space $`\mathbb{R}^{m\times n}`$ with dynamic dimension
-   $`n\in\mathbb{N}`$ and $`m\in\mathbb{N}`$
+   $`m\in\mathbb{N}`$ and $`n\in\mathbb{N}`$
 
 ### 2.1 Implementation of a Vector Class
 Write a class `Vector` containing a `std::vector<double>` for the vector coefficients. The class
 should provide the following methods:
 
-- A constructor `Vector (std::size_t size)` that initializes the vector with the given length `size`.
-- An access method for the coefficients `double& operator[] (std::size_t const i)`.
+- A constructor `Vector (std::size_t size)` that initializes the vector with the given length `size`
+  and values `0`.
+- An access method for the coefficients `double& operator[] (std::size_t i)`.
 - Access to the size by `std::size_t size () const`.
 - What else you think is useful.
 
@@ -35,13 +36,13 @@ objects that are constant, i.e., marked with the `const` qualifier.
 
 
 ### 2.2 Implementation of a Matrix Class
-Implement a class `DenseMatrix` stat stores that shape as two `std::size_t` member variables and a
+Implement a class `DenseMatrix` that stores its shape as two `std::size_t` member variables and a
 `std::vector<double>` representing the matrix coefficients, using a row-wise storage pattern. The
 class should provide the following methods:
 
-- A constructor `DenseMatrix (std::size_t rows, std::size_T cols)` to initialize a matrix of size
-  `rows x cols`.
-- An access method for the coefficients `double& operator() (std::size_t const i, std::size_t const j)`.
+- A constructor `DenseMatrix (std::size_t rows, std::size_t cols)` to initialize a matrix of size
+  `rows x cols` with values `0`.
+- An access method for the coefficients `double& operator() (std::size_t i, std::size_t j)`.
 - Access to number of rows and number of columns, i.e., `std::size_t rows () const` and
   `std::size_t cols () const`.
 - Matrix-Vector multiplication `y = A*x` by `void mv (Vector const& x, Vector& y) const`.
@@ -87,7 +88,7 @@ c++ -O3 <source1>.cc <source2>.cc... -o task2
 Implement a class `LU` that performs and stores a LU factorization of a given matrix.
 The class should provide the following methods:
 
-- Compute the LU factorization: `void compute (Matrix const& m)` of the given matrix `m` and store the
+- Compute the LU factorization: `void compute (DenseMatrix const& m)` of the given matrix `m` and store the
   result in an internal factorization matrix.
 - Solve the linear system $`Ax=b`$: `void apply (Vector const& b, Vector& x) const`, by forwards and backwards
   application of the L-U factors.
@@ -116,7 +117,7 @@ Test your class by writing a program that solves the following linear system:
     \end{pmatrix}.
 ```
 
-The for correctness of the result by computing the residual $`r = b -Ax`$.
+Test for correctness of the result by computing the residual $`r = b - Ax`$.
 
 ### Resources
 
