@@ -84,7 +84,7 @@ DualNumber operator/(double const val, DualNumber const dual)
 
 //returns the result of the polynomial f(x) = c + bx^2 + ax^4 for a given
 //dualnumber x.
-DualNumber Polynomial(DualNumber const x, double const a, double const b,
+DualNumber polynomial(DualNumber const x, double const a, double const b,
                       double const c)
 {
     return c + (b * x * x) + (a * x * x * x * x);
@@ -92,8 +92,8 @@ DualNumber Polynomial(DualNumber const x, double const a, double const b,
 
 //returns the derivative f'(x) of f(x) = c + bx^2 + ax^4, which is 
 //f'(x) = 2bx + 4ax^3 evaluated for a given dualnumber x.
-DualNumber DerivativeofPolynomial(DualNumber const x, double const a, 
-                                  double const b)
+DualNumber pol_derivative(DualNumber const x, double const a, 
+                          double const b)
 {
     return (2*b*x) + (4*a*x*x*x);
 }
@@ -101,7 +101,7 @@ DualNumber DerivativeofPolynomial(DualNumber const x, double const a,
 
 //function evaluates whether the implemented structure of a dualnumber is able
 //to satisfy the basic identities of dualnumbers.
-void testIdentities()
+void test_identities()
 {
     DualNumber one{1.0, 0.0};   
     DualNumber eps{0.0, 1.0};
@@ -122,13 +122,13 @@ void testIdentities()
 
 int main(){
 
-    testIdentities();
+    test_identities();
     DualNumber x_d{3.0, 1.0};
     std::cout << "For the given dualnumber x = 3 + eps*1, we get the value:"
-              << std::endl;
-    Polynomial(x_d, 5.0, -2.0, 7.0).printDual();
+              << std::endl;  //should print 394 + eps*528
+    polynomial(x_d, 5.0, -2.0, 7.0).printDual();
     std::cout << "For this dualnumber, the derivative of the polynomial is:"
-              << std::endl;
-    DerivativeofPolynomial(x_d, 5.0, -2.0).printDual();
+              << std::endl;  //should print 528 + eps*536
+    pol_derivative(x_d, 5.0, -2.0).printDual();
     return 0;
 }
