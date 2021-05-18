@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 struct DualNumber
 {
@@ -52,41 +52,48 @@ int main()
 	//test whether the equalities hold
 	//was it meant to look like this or should it be done differently?
 	if ((one * eps == eps * one) && (eps * one == eps))
-		std::cout << "The equation 1*\u03B5=\u03B5*1=\u03B5 holds" << std::endl;
+		std::cout << "The equation 1*\u03B5=\u03B5*1=\u03B5 holds" 
+			<< std::endl;
 	else
-		std::cout << "The equation 1*\u03B5=\u03B5*1=\u03B5 does not hold." << std::endl;
+		std::cout << "The equation 1*\u03B5=\u03B5*1=\u03B5 does not hold." 
+			<< std::endl;
 
 
 	if ((one * (one * eps) == one * eps) && (one * eps == (one * one) * eps) && ((one * one) * eps == eps))
-		std::cout << "The equation 1*(1*\u03B5)=1*\u03B5=(1*1)*\u03B5=\u03B5 holds" << std::endl;
+		std::cout << "The equation 1*(1*\u03B5)=1*\u03B5=(1*1)*\u03B5=\u03B5 holds" 
+			<< std::endl;
 	else
-		std::cout << "The equation 1*(1*\u03B5)=1*\u03B5=(1*1)*\u03B5=\u03B5 does not hold." << std::endl;
+		std::cout << "The equation 1*(1*\u03B5)=1*\u03B5=(1*1)*\u03B5=\u03B5 does not hold." 
+			<< std::endl;
 
 
 	if ((one * (eps * eps) == one * zero) && (one * zero == zero) 
 			&& (zero == eps * eps) && (eps * eps == (one * eps) * eps))
-		std::cout << "The equation 1*(\u03B5*\u03B5)=1*0=0=\u03B5*\u03B5=(1*\u03B5)*\u03B5 holds" << std::endl;
+		std::cout << "The equation 1*(\u03B5*\u03B5)=1*0=0=\u03B5*\u03B5=(1*\u03B5)*\u03B5 holds" 
+			<< std::endl;
 	else
-		std::cout << "The equation 1*(\u03B5*\u03B5)=1*0=0=\u03B5*\u03B5=(1*\u03B5)*\u03B5 does not hold." << std::endl;
+		std::cout << "The equation 1*(\u03B5*\u03B5)=1*0=0=\u03B5*\u03B5=(1*\u03B5)*\u03B5 does not hold." 
+			<< std::endl;
 
 	//the user is now able to compute the value
 	//of the polynomial at a chosen dual number
 	DualNumber x;
 
-	std::cout << "Please enter real and imaginary part of the dual number x for which f(x)=5x^4-2x^2+7 and f'(Re(x)) should be evaluated:" << std::endl;
+	std::cout << "Please enter real and imaginary part of the dual number x for which f(x)=5x^4-2x^2+7 and f'(Re(x)) should be evaluated:" 
+		<< std::endl;
 	std::cin >> x.one;
 	std::cin >> x.eps;
 
 	std::cout << std::endl;
 
 	//value of the polynomial at the dual number
-	DualNumber fx = 5*x*x*x*x - 2*x*x + 7*one;
+	DualNumber fx = 5 * x * x * x * x - 2 * x * x + 7 * one;
 
 	std::cout << "Result: f(x) = " << fx.one << " + " << fx.eps << "\u03B5" << std::endl;
 
 	//values of the polynomial + its first derivative at the real part
-	double fa = 5*x.one*x.one*x.one*x.one - 2*x.one*x.one + 7*x.one;
-	double dfdx_a = 20*x.one*x.one*x.one - 4*x.one;
+	double fa = 5 * x.one * x.one * x.one * x.one - 2 * x.one * x.one + 7 * x.one;
+	double dfdx_a = 20 * x.one * x.one * x.one - 4 * x.one;
 
 	std::cout << "f(Re(x)) = " << fa << std::endl;
 	std::cout << "f'(Re(x)) = " << dfdx_a << std::endl;
