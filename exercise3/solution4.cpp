@@ -16,8 +16,8 @@ struct DualNumber {
 	DualNumber(DualNumber const& other) : r(other.r), c(other.c) {}
 	
 	friend
-	DualNumber operator+(DualNumber const& num, T const other) {
-		return {num.r + other, num.c};
+	DualNumber operator+(DualNumber num, T const other) {
+		return num += other;
 	}
 	friend
 	DualNumber operator+(DualNumber tmp, DualNumber const& other) {
@@ -25,8 +25,8 @@ struct DualNumber {
 	}
 	
 	friend
-	DualNumber operator*(DualNumber const& num, T const other){
-		return {num.r * other, num.c * other};
+	DualNumber operator*(DualNumber num, T const other){
+		return num *= other;
 	}
 	friend
 	DualNumber operator*(DualNumber tmp, DualNumber const& other) {
@@ -34,8 +34,8 @@ struct DualNumber {
 	}
 	
 	friend
-	DualNumber operator-(DualNumber const& num, T const other) {
-		return {num.r - other, num.c};
+	DualNumber operator-(DualNumber num, T const other) {
+		return num -= other;
 	}
 	friend
 	DualNumber operator-(DualNumber tmp, DualNumber const& other) {
@@ -43,13 +43,11 @@ struct DualNumber {
 	}
 	
 	friend
-	DualNumber operator/(DualNumber const& num, T const other) {
-		assert(other != 0);
-		return { num.r / other, num.c / other };
+	DualNumber operator/(DualNumber num, T const other) {
+		return num /= other;
 	}
 	friend
 	DualNumber operator/(DualNumber const tmp, DualNumber const& other) {
-		assert(other.r != 0);
 		return tmp /= other;
 	}
 	
@@ -98,6 +96,7 @@ struct DualNumber {
 	
 	DualNumber& operator/=(T const other) {
 		assert( other != 0 );
+		
 		this->r /= other;
 		this->c /= other;
 		
@@ -105,6 +104,7 @@ struct DualNumber {
 	}
 	DualNumber& operator/=(DualNumber const& other) {
 		assert( other.r != 0 );
+		
 		this->c = (this->c * other.r - this->r * other.c) / (other.r * other.r);
 		this->r /= other.c;
 		
@@ -117,7 +117,10 @@ struct DualNumber {
 	
 	template <typename U>
 	friend
-	std::ostream& operator<<(std::ostream& out, DualNumber<U> const& other);
+	std::ostream& operator<<(std::ostream& out, DualNumber<U> const& other) {
+		out << other.r << " " << (other.c >= 0 ? "+" : "-") << " " << std::abs(other.c) << "*eps";
+		return out;
+	}
 	
 	DualNumber pow(unsigned int const n) const {
 		auto tmp{*this};
@@ -130,12 +133,6 @@ struct DualNumber {
 
 
 };
-
-template <typename T>
-std::ostream& operator<<(std::ostream& out, DualNumber<T> const& other) {
-	out << other.r << " " << (other.c >= 0 ? "+" : "-") << " " << other.c << "*eps";
-	return out;
-}
 
 template <typename T>
 DualNumber<T> add(DualNumber<T> const& a, DualNumber<T> const& b) {
