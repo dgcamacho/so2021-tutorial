@@ -47,6 +47,7 @@ DualNumber div (DualNumber x, DualNumber y) {
 }
 */
 
+// 5. operators 
 DualNumber operator+ (DualNumber x, DualNumber y) {
     DualNumber result;
     result.a = x.a + y.a;
@@ -91,9 +92,21 @@ DualNumber f (DualNumber x) {
     return result;
 }
 
+double f (double x) {
+    double result;
+    result = 5*x*x*x*x - 2*x*x + 7;
+    return result;
+}
+
 DualNumber deriv_f (DualNumber x) {
     DualNumber result;
     result = (20 * ((x*x)*x)) - (4*x);
+    return result;
+}
+
+double deriv_f (double x) {
+    double result;
+    result = 20*x*x*x - 4*x;
     return result;
 }
 
@@ -117,11 +130,11 @@ int main() {
     
     // 4. evaluate the function f at x
     DualNumber x = {3,1};
-    DualNumber a = {3,0};
+    double a = 3.0;
     print(x, "x = ");
     print(f(x), "f(x) = ");
-    print(f(a), "f(a) = ");
-    print(deriv_f(a), "f'(a) = ");    
-    // first component of f(x) is equal to f(a) 
-    // second component of f(x) is equal to f'(a)
+    std::cout << "f(a) = " << f(a) << std::endl;
+    std::cout << "f'(a) = " << deriv_f(a) << std::endl;
+    std::cout << "First component of f(x) is equal to f(a)." << std::endl; 
+    std::cout << "Second component of f(x) is equal to f'(a)." << std::endl;
 }
