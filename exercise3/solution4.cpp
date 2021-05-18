@@ -115,10 +115,9 @@ struct DualNumber {
 		return std::abs(this->r - other.r) < std::numeric_limits<T>::epsilon() && std::abs(this->c - other.c) < std::numeric_limits<T>::epsilon();
 	}
 	
-	template <typename U>
 	friend
-	std::ostream& operator<<(std::ostream& out, DualNumber<U> const& other) {
-		out << other.r << " " << (other.c >= 0 ? "+" : "-") << " " << std::abs(other.c) << "*eps";
+	std::ostream& operator<<(std::ostream& out, DualNumber const& other) {
+		out << other.r << " " << (other.c >= 0 ? "+" : "-") << " " << (other.c >= 0 ? other.c : -other.c) << "*eps";
 		return out;
 	}
 	
