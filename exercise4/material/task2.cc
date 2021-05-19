@@ -2,8 +2,8 @@
 #include <iostream>
 #include <limits>
 
-#include "DenseMatrix.hh"
-#include "Vector.hh"
+#include "DenseMatrix_.hh"
+#include "Vector_.hh"
 #include "Timer.hh"
 
 using namespace scprog;
