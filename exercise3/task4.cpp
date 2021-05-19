@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cassert>
 
-struct DualNumber {
+struct DualNumber 
+{
     // first is the "normal" entry, second the epsilon entry
     double first, second;
 };
@@ -56,7 +57,7 @@ struct DualNumber div (DualNumber const num1, DualNumber const num2)
 struct DualNumber f (DualNumber const x)
 {
     // function f from the task, 5*x^4 - 2*x^2 +7
-    DualNumber help1, help2, help3;
+    DualNumber help1{}, help2{}, help3{};
     help1 = mul(x,x);
     help2 = mul(help1, help1);
     help3 = add ( sub( mul({5,0}, help2), mul({2,0}, help1) ), {7,0});
@@ -77,7 +78,8 @@ struct DualNumber fDeriv (DualNumber const x)
 int main()
 {
     // asserts the three statements eps*eps=0, 1*1=1, eps*1=1*eps, all other equations follow from these;
-    // prints out f(x), f(a) and f'(a)
+    // prints out f(x), f(a) and f'(a);
+    // f(a) is the "normal" part of f(x), f'(a) is the "dual" part of f(x)
     DualNumber const one{1, 0};
     DualNumber const eps{0, 1};
     DualNumber const x{3, 1};
