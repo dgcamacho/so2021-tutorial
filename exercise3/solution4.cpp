@@ -1,8 +1,8 @@
-#include <iostream>
-#include <cmath>
-#include <iomanip>
-#include <cstdlib>
 #include <cassert>
+#include <cmath>
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
 #include <limits>
 
 template <typename T>
