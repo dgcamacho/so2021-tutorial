@@ -1,4 +1,7 @@
 #include "Vector.hh"
+#include "Util.hh"
+
+#include <cassert>
 
 namespace scprog {
 

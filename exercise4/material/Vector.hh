@@ -1,33 +1,29 @@
 #pragma once
 
+#include "Util.hh"
+
 #include <vector>
 
-namespace scprog
-{
-  class Vector
-  {
+namespace scprog {
+
+  class Vector {
   public:
-    // The data type of the matrix entries
-    using value_type = double;
+    // Construct and initialize a vector of the given size.
+    Vector(Size size);
 
-    // The data type of the size and indices
-    using size_type = std::size_t;
+    // Mutable access to the vector entry.  The index must be valid for
+    // the given vector.
+    auto operator[](Size i) -> Value&;
 
-  public:
-    // construct and initialize the matrix of size rows x cols
-    Vector (size_type size);
+    // Const access to the vector entry.  The index must be valid for
+    // the given vector.
+    auto operator[](Size i) const -> Value const&;
 
-    // mutable access to the matrix entries
-    value_type& operator[] (size_type i);
-
-    // const access to the matrix entries
-    value_type const& operator[] (size_type i) const;
-
-    // return the number of vector entries
-    size_type size () const;
+    // Return the size of the vector.
+    auto size() const -> Size;
 
   private:
-    std::vector<double> data_;
+    std::vector<Value> _data;
   };
 
 } // end namespace scprog

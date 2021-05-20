@@ -1,26 +1,26 @@
 #pragma once
 
-#include "DenseMatrix.hh"
-#include "Vector.hh"
+#include "Util.hh"
 
-namespace scprog
-{
-  class LU
-  {
+namespace scprog {
+
+  // Forward declarations.
+  class Vector;
+  class DenseMatrix;
+
+  class LU {
   public:
-    // decomposing the matrix m, without modifing it
-    void compute (DenseMatrix const& m)
-    {
+    // Decomposing the matrix m, without modifing it.
+    auto compute (DenseMatrix const& m) -> void {
       /*...*/
     }
 
-    void apply (Vector const& b, Vector& x) const
-    {
+    auto const apply (Vector const& b, Vector& x) -> void {
       /*...*/
     }
 
   private:
-    DenseMatrix decomposition_; // store the decomposition in this matrix
+    DenseMatrix _decomposition; // store the decomposition in this matrix
   };
 
 } // end namespace scprog

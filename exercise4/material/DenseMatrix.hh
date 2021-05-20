@@ -1,44 +1,41 @@
 #pragma once
 
+#include "Util.hh"
+
 #include <vector>
 
-namespace scprog
-{
+namespace scprog {
+
   // forward declaration
   class Vector;
 
-  class DenseMatrix
-  {
+  class DenseMatrix {
   public:
-    // The data type of the matrix entries
-    using value_type = double;
+    // Construct and initialize the matrix of size rows x cols.
+    DenseMatrix(Size rows, Size cols);
 
-    // The data type of the size and indices
-    using size_type = std::size_t;
+    // Mutable access to the matrix entries.  The tuple (i, j) must be a
+    // valid entry in the matrix.
+    auto operator()(Size i, Size j) -> Value&;
 
-  public:
-    // construct and initialize the matrix of size rows x cols
-    DenseMatrix (size_type rows, size_type cols);
+    // Const access to the matrix entries.  The tuple (i, j) must be a
+    // valid entry in the matrix.
+    auto operator()(Size i, Size j) const -> Value const&;
 
-    // mutable access to the matrix entries
-    value_type& operator() (size_type i, size_type j);
+    // Return the number of rows.
+    auto rows() const -> Size;
 
-    // const access to the matrix entries
-    value_type const& operator() (size_type i, size_type j) const;
+    // Return the number of columns.
+    auto cols() const -> Size;
 
-    // return the number of rows
-    size_type rows () const;
-
-    // return the number of columns
-    size_type cols () const;
-
-    // matrix-vector product y = A*x
-    void mv (Vector const& x, Vector& y) const;
+    // Matrix-vector product y = A · x.  The given Matrix A must be of
+    // size n × n, for n ≔ size(y) ≡ size(x).
+    auto mv(Vector const& x, Vector& y) const -> void;
 
   private:
-    std::size_t rows_;
-    std::size_t cols_;
-    std::vector<double> data_;
+    Size _rows;
+    Size _cols;
+    std::vector<Value> _data;
   };
 
 } // end namespace scprog
