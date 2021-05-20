@@ -1,44 +1,40 @@
 #include "DenseMatrix.hh"
-#include "Vector.hh"
 #include "Util.hh"
+#include "Vector.hh"
 
 #include <cassert>
 
 namespace scprog {
 
-DenseMatrix::DenseMatrix (size_type const rows, size_type const cols)
-{
-  /*...*/
-}
+  DenseMatrix::DenseMatrix(Size const rows, Size const cols)
+      : _rows(rows), _cols(cols), _data(_rows * _cols, 0) {}
 
+  auto DenseMatrix::operator()(Size const i, Size const j) -> Value& {
+    assert(i * j < _rows * _cols);
+    return _data[i * _cols + j];
+  }
 
-DenseMatrix::value_type& DenseMatrix::operator() (size_type const i, size_type const j)
-{
-  /*...*/
-}
+  auto DenseMatrix::operator()(Size const i, Size const j) const -> Value const& {
+    assert(i * j < _rows * _cols);
+    return _data[i * _cols + j];
+  }
 
+  auto DenseMatrix::rows() const -> Size {
+    return _rows;
+  }
 
-DenseMatrix::value_type const& DenseMatrix::operator() (size_type const i, size_type const j) const
-{
-  /*...*/
-}
+  auto DenseMatrix::cols() const -> Size {
+    return _cols;
+  }
 
-
-DenseMatrix::size_type DenseMatrix::rows () const
-{
-  /*...*/
-}
-
-
-DenseMatrix::size_type DenseMatrix::cols () const
-{
-  /*...*/
-}
-
-
-void DenseMatrix::mv (Vector const& x, Vector& y) const
-{
-  /*...*/
-}
+  auto DenseMatrix::mv(Vector const& x, Vector& y) const -> void {
+    assert(_rows == _cols && x.size() == _rows && y.size() == _rows);
+    for (Size i = 0; i < _rows; ++i) {
+      y[i] = 0;  // we don't know what the vector looks like, so be sure
+      for (Size j = 0; j < _cols; ++j) {
+        y[i] += (*this)(i, j) * x[j];
+      }
+    }
+  }
 
 } // end namespace scprog
