@@ -1,44 +1,39 @@
 #pragma once
 
+#include <cassert>
 #include <vector>
 
 namespace scprog
 {
-  // forward declaration
-  class Vector;
+    class Vector;
 
-  class DenseMatrix
-  {
-  public:
-    // The data type of the matrix entries
-    using value_type = double;
+    class DenseMatrix
+    {
+        public:
+            using value_type = double;
+            using size_type = std::size_t;
+        public:
+            DenseMatrix():rows_{0}, cols_{0} {}
 
-    // The data type of the size and indices
-    using size_type = std::size_t;
+            DenseMatrix(size_type nrows, size_type ncols): rows_{nrows},
+                                                           cols_{ncols} {
+                data_ = std::vector<value_type>(nrows*ncols);
+            }
+            DenseMatrix(DenseMatrix const& v);
 
-  public:
-    // construct and initialize the matrix of size rows x cols
-    DenseMatrix (size_type rows, size_type cols);
+            value_type& operator()(size_type i, size_type j);
 
-    // mutable access to the matrix entries
-    value_type& operator() (size_type i, size_type j);
+            value_type const& operator()(size_type i, 
+                                         size_type j) const;
+            size_type rows() const;
 
-    // const access to the matrix entries
-    value_type const& operator() (size_type i, size_type j) const;
+            size_type cols() const;
 
-    // return the number of rows
-    size_type rows () const;
+            void mv(Vector const& x, Vector& y) const;
 
-    // return the number of columns
-    size_type cols () const;
-
-    // matrix-vector product y = A*x
-    void mv (Vector const& x, Vector& y) const;
-
-  private:
-    std::size_t rows_;
-    std::size_t cols_;
-    std::vector<double> data_;
-  };
-
-} // end namespace scprog
+        private:
+            size_type rows_;
+            size_type cols_;
+            std::vector<double> data_;
+    };
+}
