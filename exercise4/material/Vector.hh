@@ -26,6 +26,10 @@ namespace scprog
     // return the number of vector entries
     size_type size () const;
 
+    Vector operator- (Vector v);
+
+    void print();
+
   private:
     std::vector<double> data_;
   };

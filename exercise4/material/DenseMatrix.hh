@@ -17,6 +17,8 @@ namespace scprog
     using size_type = std::size_t;
 
   public:
+    DenseMatrix () = default;
+
     // construct and initialize the matrix of size rows x cols
     DenseMatrix (size_type rows, size_type cols);
 
@@ -34,6 +36,8 @@ namespace scprog
 
     // matrix-vector product y = A*x
     void mv (Vector const& x, Vector& y) const;
+
+    void print();
 
   private:
     std::size_t rows_;
