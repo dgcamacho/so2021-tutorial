@@ -9,6 +9,11 @@ namespace scprog {
   DenseMatrix::DenseMatrix(Size const rows, Size const cols)
       : _rows(rows), _cols(cols), _data(_rows * _cols, 0) {}
 
+  DenseMatrix::DenseMatrix(Size const rows, Size const cols, InitializerList<Value> init)
+      : _rows(rows), _cols(cols), _data(init) {
+    assert (init.size() == cols * rows);
+  }
+
   auto DenseMatrix::operator()(Size const i, Size const j) -> Value& {
     assert(i * j < _rows * _cols);
     return _data[i * _cols + j];

@@ -7,6 +7,8 @@ namespace scprog {
 
   Vector::Vector(Size const size) : _data(size, 0.0) {}
 
+  Vector::Vector(InitializerList<Value> init) : _data(init) {}
+
   auto Vector::operator[](Size const i) -> Value& {
     assert(i < _data.size());
     return _data[i];

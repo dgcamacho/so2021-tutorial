@@ -14,6 +14,10 @@ namespace scprog {
     // Construct and initialize the matrix of size rows x cols.
     DenseMatrix(Size rows, Size cols);
 
+    // Construct a matrix of size rows × cols and initialize it with the
+    // given list.  The list has to be of length rows × cols.
+    DenseMatrix(Size rows, Size cols, InitializerList<Value> init);
+
     // Mutable access to the matrix entries.  The tuple (i, j) must be a
     // valid entry in the matrix.
     auto operator()(Size i, Size j) -> Value&;

@@ -11,6 +11,9 @@ namespace scprog {
     // Construct and initialize a vector of the given size.
     Vector(Size size);
 
+    // Construct a vector from a given initializer list.
+    Vector(InitializerList<Value>);
+
     // Mutable access to the vector entry.  The index must be valid for
     // the given vector.
     auto operator[](Size i) -> Value&;
