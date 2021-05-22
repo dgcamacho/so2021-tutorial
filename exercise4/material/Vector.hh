@@ -29,4 +29,11 @@ namespace scprog {
     std::vector<Value> _data;
   };
 
+  // Pretty print a vector of length n as "[x₁, ..., xₙ]".
+  auto operator<<(OStream& os, Vector const& vec) -> OStream&;
+
+  // Subtract two vectors from each other element-wise.  The vectors
+  // need to have the same length.
+  auto operator-(Vector const& l, Vector const& r) -> Vector;
+
 } // end namespace scprog
