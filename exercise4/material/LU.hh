@@ -10,8 +10,9 @@ namespace scprog {
 
   class LU {
   public:
-    // Decompose the matrix m, without modifing it.
-    auto compute (DenseMatrix const& m) -> void;
+    // Construct an LU decomposition.  The given matrix must be a square
+    // matrix.
+    LU (DenseMatrix const& m);
 
     /**
      * Compute A · x = b, where A = LU.  Solve the system by forwards
@@ -24,10 +25,14 @@ namespace scprog {
   private:
     DenseMatrix _decomposition; // store the decomposition in this matrix
 
+    // Decompose a square matrix (!), without modifying it.
+    auto compute (DenseMatrix const& m) -> void;
+
     // Convenience operators.
     auto operator()(Size const i, Size const j) -> Value& {
       return _decomposition(i, j);
     }
+
     auto operator()(Size const i, Size const j) const -> Value const& {
       return _decomposition(i, j);
     }

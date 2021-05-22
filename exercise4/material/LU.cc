@@ -6,6 +6,10 @@
 
 namespace scprog {
 
+  LU::LU(DenseMatrix const& m) : _decomposition(m) {
+    compute(m);
+  }
+
   auto LU::compute(DenseMatrix const& m) -> void {
     assert(m.rows() == m.cols());
     Size n {m.rows()};
