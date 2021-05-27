@@ -24,8 +24,7 @@ int main()
 	r = b - r;
 	std::cout << "residual b-Ax = ";
 	for (int i{0}; i < 3; ++i) {
-  	std::cout << r[i] << " ";
-  }
- 	std::cout << std::endl;
-  
+		std::cout << r[i] << " ";
+	}
+	std::cout << std::endl;
 }

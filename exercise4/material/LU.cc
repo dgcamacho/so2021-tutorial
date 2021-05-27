@@ -15,10 +15,10 @@ From m11, m12, m21 we can calculate the first row and column of L and U and then
 void LU::compute (DenseMatrix const& m)
 {
 	DenseMatrix::size_type const n{m.rows()};
-  if (n == 1){
-    decomposition_ = m;
-    return;
-  }
+	if (n == 1){
+		decomposition_ = m;
+		return;
+	}
 
   DenseMatrix::value_type U11{ m(0, 0) };	//U11 = m11 = m(0, 0)
   Vector L21{n-1}, U12{n-1};
