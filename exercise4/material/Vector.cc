@@ -4,7 +4,7 @@ namespace scprog {
 
 Vector::Vector (size_type const size)
 {
-  this->data_ = std::vector<value_type>(size, 0.0);
+	data_ = std::vector<value_type>(size, 0.0);
 }
 
 Vector::Vector (Vector const& v)
@@ -17,19 +17,37 @@ Vector::Vector (Vector const& v)
 
 Vector::value_type& Vector::operator[] (size_type const i)
 {
-  return this->data_[i];
+	return data_[i];
 }
-
 
 Vector::value_type const& Vector::operator[] (size_type const i) const
 {
-  return this->data_[i];
+	return data_[i];
 }
 
+Vector& Vector::operator= (Vector const& that)
+{
+	if (this != &that) {          // prevent from self assignment
+		data_.clear();             // delete the old data first
+		data_.shrink_to_fit();
+		data_ = std::vector<value_type>(that.size(), 0.0);  // allocate new data
+		for (size_type i = 0; i < that.size(); ++i)  // copy the data
+			data_[i] = that.data_[i];
+	}
+	return *this;
+}
+
+Vector& Vector::operator-= (Vector const& other)
+{
+	for (size_type i{0}; i < other.size(); ++i) {
+		data_[i] -= other.data_[i];
+	}
+	return *this;
+}
 
 Vector::size_type Vector::size () const
 {
-  return this->data_.size();
+	return data_.size();
 }
 
 void Vector::scale (double const factor)
