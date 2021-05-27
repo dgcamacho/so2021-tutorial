@@ -20,8 +20,8 @@ void LU::compute (DenseMatrix const& m)
 		return;
 	}
 
-  DenseMatrix::value_type U11{ m(0, 0) };	//U11 = m11 = m(0, 0)
-  Vector L21{n-1}, U12{n-1};
+	DenseMatrix::value_type U11{ m(0, 0) };	//U11 = m11 = m(0, 0)
+	Vector L21{n-1}, U12{n-1};
 	DenseMatrix m22{n-1, n-1}, S22{n-1, n-1};
 	LU recurs{m.rows()};
 
