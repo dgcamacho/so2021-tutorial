@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 namespace scprog
@@ -35,6 +36,9 @@ namespace scprog
     // matrix-vector product y = A*x
     void mv (Vector const& x, Vector& y) const;
 
+    // print a matrix
+    void print();
+    
   private:
     std::size_t rows_;
     std::size_t cols_;

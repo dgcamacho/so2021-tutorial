@@ -5,22 +5,23 @@
 
 namespace scprog
 {
-  class LU
-  {
-  public:
-    // decomposing the matrix m, without modifing it
-    void compute (DenseMatrix const& m)
-    {
-      /*...*/
-    }
+    class LU {
+        public:
+            LU (DenseMatrix::size_type const n);
 
-    void apply (Vector const& b, Vector& x) const
-    {
-      /*...*/
-    }
+            // decomposing the matrix m, without modifing it
+            void compute (DenseMatrix const& mat);
 
-  private:
-    DenseMatrix decomposition_; // store the decomposition in this matrix
-  };
+            // apply LU decomposition for solving Ax = LUx = b
+            void apply (Vector const& b, Vector& x) const;
+
+            // print the factors of LU decomposition separately
+            void print ();
+
+            //DenseMatrix get ();
+            
+        private:
+            DenseMatrix decomposition_; // store the decomposition in this matrix
+    };
 
 } // end namespace scprog
