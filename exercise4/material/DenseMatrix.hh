@@ -2,13 +2,11 @@
 
 #include <vector>
 
-namespace scprog
-{
+namespace scprog {
   // forward declaration
   class Vector;
 
-  class DenseMatrix
-  {
+  class DenseMatrix {
   public:
     // The data type of the matrix entries
     using value_type = double;
@@ -35,10 +33,16 @@ namespace scprog
     // matrix-vector product y = A*x
     void mv (Vector const& x, Vector& y) const;
 
+    // get a Vector representing the indexed row
+    void row_by_index (size_type i, Vector& res) const;
+
+    // print out this matrix
+    void print() const;
+
   private:
-    std::size_t rows_;
-    std::size_t cols_;
-    std::vector<double> data_;
+    size_type rows_;
+    size_type cols_;
+    std::vector<value_type> data_;
   };
 
 } // end namespace scprog

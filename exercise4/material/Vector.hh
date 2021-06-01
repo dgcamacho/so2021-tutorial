@@ -2,10 +2,8 @@
 
 #include <vector>
 
-namespace scprog
-{
-  class Vector
-  {
+namespace scprog {
+  class Vector {
   public:
     // The data type of the matrix entries
     using value_type = double;
@@ -26,8 +24,23 @@ namespace scprog
     // return the number of vector entries
     size_type size () const;
 
+    // dot-product this with x
+    value_type dot (Vector const& x) const;
+
+    // add two vectors together
+    Vector operator+(const Vector &b) const;
+
+    // subtract two vectors
+    Vector operator-(const Vector &b) const;
+
+    // print this vector
+    void print() const;
+
+    // check if vector is almost 0
+    bool is_null() const;
+
   private:
     std::vector<double> data_;
   };
 
-} // end namespace scprog
+}
