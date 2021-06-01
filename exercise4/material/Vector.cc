@@ -1,4 +1,9 @@
-#include "Vector_.hh"
+#include "Vector.hh"
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+
 
 namespace scprog 
 {
@@ -7,6 +12,7 @@ namespace scprog
 
     template <typename T>
     bool almost_equal(T const x, T const y, int ulp = 2)
+    // machine-dependent tolerance value for equality-comparisons
     {
         double const eps = std::numeric_limits<T>::epsilon();
         double const min = std::numeric_limits<T>::min();
@@ -16,17 +22,27 @@ namespace scprog
 
     }
 
+    // copy constructor
     Vector::Vector (Vector const& v) {
-        assert(Vector::size() == v.size());
+        // the size of the initial vector is resized to fit the size of the 
+        // vector to be copied and the data is deleted to free memory space
+        if(Vector::size() != v.size()) {
+            // free up memory space occupied by the old data
+            data_.clear();
+            rows_ = v.size();
+            data_ = std::vector<value_type>(v.size());
+        }
         for (size_type i = 0; i < v.size(); ++i) 
             data_[i] = v.data_[i];
     }
 
+    // access vector-entries and change them
     value_type& Vector::operator[](size_type i)
     {
         return data_[i];
     }
 
+    // ask for specific  vector-entries
     value_type const& Vector::operator[](size_type i) const
     {
         return data_[i];
@@ -52,12 +68,65 @@ namespace scprog
         return *this;
     }
 
+    // fill a vector with a given data-vector
+    Vector& Vector::fill(std::vector<value_type> data, size_type size)
+    {
+        if (data.size() != Vector::size()) {
+            data_.clear();
+            rows_ = size;
+            data_ = std::vector<value_type>(data.size());
+        }
+        for (size_type i = 0; i < data.size(); ++i)
+            data_[i] = data[i];
+        
+        return *this;
+    }
+
+    // find the maximum of a given vector
+    value_type Vector::max() const {
+        value_type val_max = data_[0];
+        for (size_type i = 1; i < size(); ++i) 
+            val_max = std::max(val_max, data_[i]);
+        return val_max;
+    }
+
+    // find the minimum of a given vector
+    value_type Vector::min() const {
+        value_type val_min = data_[0];
+        for (size_type i = 1; i < size(); ++i)
+            val_min = std::min(val_min, data_[i]);
+        return val_min;
+    }
+
+    // find the index of the maximum of a given vector
+    size_type Vector::argmax() const {
+        size_type imax = 0;
+        for (size_type i = 1; i < size(); ++i) 
+            imax = (std::abs(data_[imax]) > std::abs(data_[i])) ? imax : i;
+        return imax;
+    }
+
+    // find the index of the minimum of a given vector
+    size_type Vector::argmin() const {
+        size_type imin = 0;
+        for (size_type i = 1; i < size(); ++i)
+            imin = (std::abs(data_[imin]) < std::abs(data_[i])) ? imin : i;
+        return imin;
+    }
+
+    void Vector::printV() const {
+        for (size_type i = 0; i < this->size(); ++i) {
+            std::cout << this->operator[](i) << std::endl;
+        }
+    }
+
     Vector operator+(Vector tmp, Vector const& v)
     {
         assert(tmp.size() == v.size());
         return tmp+=v;
     }
 
+    // calculates vector dotproduct
     value_type dot(Vector const& v1, Vector const& v2)
     {
         assert(v1.size() == v2.size());
@@ -67,6 +136,7 @@ namespace scprog
         return dotproduct;
     }
 
+    // scales all entries of a given vector
     Vector operator*(value_type const scale, Vector const& v)
     {
         Vector v_scale{v};
@@ -79,6 +149,8 @@ namespace scprog
         return tmp+=-1.0*v;
     }
 
+    // checks equality of two vectors using the tolerance function implemented
+    // above
     bool operator==(Vector const& v1, Vector const& v2)
     {
         assert(v1.size() == v2.size());
