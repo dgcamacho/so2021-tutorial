@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 namespace scprog
@@ -19,12 +20,16 @@ namespace scprog
   public:
     // construct and initialize the matrix of size rows x cols
     DenseMatrix (size_type rows, size_type cols);
+    DenseMatrix( DenseMatrix const& other );
 
     // mutable access to the matrix entries
     value_type& operator() (size_type i, size_type j);
 
     // const access to the matrix entries
     value_type const& operator() (size_type i, size_type j) const;
+    
+    DenseMatrix& operator*=(DenseMatrix const&);
+    DenseMatrix& operator=(DenseMatrix const&);
 
     // return the number of rows
     size_type rows () const;
@@ -40,5 +45,8 @@ namespace scprog
     std::size_t cols_;
     std::vector<double> data_;
   };
+  
+  DenseMatrix operator*(DenseMatrix const& lhs, DenseMatrix const& rhs);
+  std::ostream& operator<<(std::ostream& out, DenseMatrix const& other);
 
 } // end namespace scprog

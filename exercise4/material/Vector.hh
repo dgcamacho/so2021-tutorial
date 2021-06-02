@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 namespace scprog
@@ -17,6 +18,11 @@ namespace scprog
     // construct and initialize the matrix of size rows x cols
     Vector (size_type size);
 
+    Vector& operator+=(Vector const&);
+    Vector& operator-=(Vector const&);
+    Vector& operator*=(value_type const);
+    Vector& operator/=(value_type const);
+
     // mutable access to the matrix entries
     value_type& operator[] (size_type i);
 
@@ -29,5 +35,13 @@ namespace scprog
   private:
     std::vector<double> data_;
   };
+  
+  Vector operator+(Vector const& lhs, Vector const& rhs);
+  Vector operator-(Vector const& lhs, Vector const& rhs);
+  Vector operator*(Vector::value_type const factor, Vector const& vec);
+  Vector operator*(Vector const& vec, Vector::value_type const factor);
+  Vector operator/(Vector const& vec, Vector::value_type const factor);
+  
+  std::ostream& operator<<(std::ostream& out, Vector const& other);
 
 } // end namespace scprog
