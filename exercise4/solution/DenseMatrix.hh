@@ -53,8 +53,8 @@ namespace scprog
     void mv (Vector const& x, Vector& y) const;
 
   private:
-    std::size_t rows_;
-    std::size_t cols_;
+    std::size_t const rows_;
+    std::size_t const cols_;
     std::vector<double> data_;
   };
 
