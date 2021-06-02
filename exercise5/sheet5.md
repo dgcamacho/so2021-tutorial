@@ -31,6 +31,7 @@ int main() {
 ```
 Change the code to correct all errors and print the value of each expression.
 
+
 ## Task 2
 
 In the following there are various overloads of `foo(.)` and `bar(.,.)` provided. Which of the function is called in the
@@ -65,48 +66,70 @@ int main() {
 }
 ```
 
-## Task 3
 
-Implement a sparse matrix in CRS Format. Therefore, write a class `CRSMatrix` that provides the following
+## Task 3 (Arithmetic operators for Vectors)
+
+For the class `Vector` from exercise sheet 4 implement the following arithmetic and assignment operators inside the class:
+
+- `Vector& operator+=(Vector const&)` elementwise addition
+- `Vector& operator-=(Vector const&)` elementwise subtraction
+- `Vector& operator*=(value_type factor)` elementwise multiplication with `factor`
+- `Vector& operator/=(value_type factor)` elementwise division by `factor`
+
+Additionally implement the following functions outside the class and use the in-class methods for their implementation:
+
+- `Vector operator+(Vector const&, Vector const&)` addition
+- `Vector operator-(Vector const&, Vector const&)` subtraction
+- `Vector operator*(Vector::value_type factor, Vector const&)` multiplication from the left with `factor`
+- `Vector operator*(Vector const&, Vector::value_type factor)` multiplication from the right with `factor`
+- `Vector operator/(Vector const&, Vector::value_type factor)` division from the right by `factor`
+
+
+## Task 4 (Sparse Matrix) - Submit for review :pencil:
+
+Implement a sparse matrix in CRS Format. Therefore, write a class `CRSMatrix<T>` parametrized with the element type `T` that provides the following
 interface:
 
 - A constructor with number of rows and number of columns and a third argument for the maximal
   number of nonzero entries per row.
-- A function `void add(size_type i, size_type j, value_type value)` to add a nonzero entry at `(i,j)` to
+- A type alias `value_type = T` (and a `size_type` alias as well)
+- A function `void add (size_type i, size_type j, value_type value)` to add a nonzero entry at `(i,j)` to
   the matrix. If an entry already exists at this position, the values should be added up.
-- A function `void set(size_type i, size_type j, value_type value)` to add a nonzero entry at `(i,j)` to
+- A function `void set (size_type i, size_type j, value_type value)` to add a nonzero entry at `(i,j)` to
   the matrix. If an entry already exists at this position, the values should be replaced by the given `value`.
-- A function `void compress()` to remove all gaps and zeros in the internal storage.
+- A function `void compress ()` to remove all gaps and zeros in the internal storage.
 - Matrix-Vector multiplication `y = A*x` by `void mv (Vector const& x, Vector& y) const`.
 
 The strategy to implement insertion is as follows:
 
-1. Create vectors `indices` and `values` of size *(maximum number of nonzeros per row) x (number of rows)*
-2. Create a vector `offset` of size *(number of rows)* that contains the number of column entries already stored in each row, thus initialized to 0.
-3. On insertion by `add` or `set` go to the corresponding position of the row and traverse all stored
+1. Create vectors `indices` and `values` of size *(maximum number of nonzeros per row) x (number of rows)* and type `std::vector<...>`
+2. Create a vector `offset` of size *(number of rows)* and type `std::vector<...>` that contains the number of column entries already stored in each row, thus initialized to 0.
+3. On insertion by `add` or `set` go to the corresponding position of the row in `indices` and `values` and traverse all stored column
    indices to find the position where to insert a new entry. Therefore, we assume that the column indices
-   are stored sorted. Thus, you can use a binary-search to find the position where to insert a new entry.
+   are sorted in each row. Thus, you can use a binary-search to find the position where to insert a new entry.
    Move all entries with higher indices one position to the right and insert the new index (or if the
-   column index exists already, just modify the value)
+   column index exists already, just modify the value).
 4. Update the `offset` vector by increasing the number of column values by one (or leave it untouched if the
-   existing value was just overridden)
+   existing value was just modified)
 5. On `compress()` all three vectors should be transformed into the final format. Therefore traverse
    row-wise, accumulate the row-sizes to get the offset, and collect only those entries in `indices` and `values`
    that are stored in each row.
 
+### Resources
 
-
-
-
-## Task 4 (LU-Decomposition) - Submit for review :pencil:
+- [Wikipedia:Compressed_Row_Storage](https://de.wikipedia.org/wiki/Compressed_Row_Storage)
+- [cppreference:vector](https://en.cppreference.com/w/cpp/container/vector)
+- Binary search: [cppreference:lower_bound](https://en.cppreference.com/w/cpp/algorithm/lower_bound). Either pass the pointer to the beginning of the range you want to search, or use `first=indices.begin()+n` (where `n` is the corresponding shift) for the starting point and `last=first+offset[row]` for the end point.
+- Insertion algorithms for sparse CRS matrices: http://old.simunova.com/system/files/mtl4_fenics.pdf
 
 ### Submission
-This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
-page. In summary: 1. create a new branch `<zih-id>/exercise4`, 2. inside the folder `exercise4/` add
-your solution: `task3.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
-branch to the remote repository by `git push origin <zih-id>/exercise3`, 5. create a merge request.
 
-**Deadline for the submission: end of 2021/06/02**
+This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
+page. In summary: 1. create a new branch `<zih-id>/exercise5`, 2. inside the folder `exercise5/` add
+your solution: `task4.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
+branch to the remote repository by `git push origin <zih-id>/exercise5`, 5. create a merge request.
+
+**Deadline for the submission: end of 2021/06/09**
 
 
 ## Extra Task 5 (GotW-1: Variable initialization -- or is it?)
