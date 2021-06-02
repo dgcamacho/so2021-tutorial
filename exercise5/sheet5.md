@@ -129,6 +129,10 @@ page. In summary: 1. create a new branch `<zih-id>/exercise5`, 2. inside the fol
 your solution: `task4.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
 branch to the remote repository by `git push origin <zih-id>/exercise5`, 5. create a merge request.
 
+### Pair Review
+
+This time, the review will be done differently. After all submissions are received, you get assigned as reviewer to another submission. We have shown how to do a review in the past exercises. Now it's your turn. Details follow on the next exercise sheet.
+
 **Deadline for the submission: end of 2021/06/09**
 
 
