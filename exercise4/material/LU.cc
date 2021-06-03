@@ -34,7 +34,7 @@ void LU::compute(DenseMatrix const& m) {
     L *= LnInv;
   }
   
-  decomposition_ = DenseMatrix{U};
+  decomposition_ = U;
   for( SizeType i{1}; i < U.rows(); i++ ) {
     for( SizeType j{0}; j < i; j++ ) {
       decomposition_(i,j) = L(i,j);
@@ -45,19 +45,18 @@ void LU::compute(DenseMatrix const& m) {
 void LU::apply (Vector const& b, Vector& x) const {
   using SizeType = Vector::size_type;
   
-  Vector y(x.size());
+  assert( b.size() == x.size() );
   
-  // solve Ly = b
+  x=b;
+  // solve Lx = b
   for( SizeType i{0}; i < x.size(); i++ ) {
-    y[i] = b[i];
     for( SizeType j{0}; j < i; j++ ) {
-      y[i] -= y[j] * decomposition_(i,j);
+      x[i] -= x[j] * decomposition_(i,j);
     }
   }
   
-  // solve Ux = y
+  // solve Ux_new = x
   for( int i = x.size()-1; i >= 0; i-- ) {
-    x[i] = y[i];
     for( int j = x.size() - 1; j > i; j-- ) {
       x[i] -= x[j] * decomposition_(i,j);
     }

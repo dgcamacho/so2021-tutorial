@@ -10,20 +10,11 @@
 namespace scprog {
 
 DenseMatrix::DenseMatrix (size_type const rows, size_type const cols) : rows_(rows), cols_(cols),  data_(rows * cols, 0) {}
-
-DenseMatrix::DenseMatrix( DenseMatrix const& other ) : rows_(other.rows()), cols_(other.cols()), data_(other.cols() * other.rows()) {
-  *this = other;
-}
+DenseMatrix::DenseMatrix (DenseMatrix const& other) : rows_(other.rows()), cols_(other.cols()), data_(other.data_) {}
 
 DenseMatrix& DenseMatrix::operator=(DenseMatrix const& other) {
-  using SizeType = DenseMatrix::size_type;
-  
-  for( SizeType i{0}; i < other.rows(); i++ ) {
-    for( SizeType j{0}; j < other.cols(); j++ ) {
-      (*this)(i,j) = other(i,j);
-    }
-  }
-  
+  data_.resize(other.data_.size());
+  std::copy(other.data_.begin(), other.data_.end(), data_.begin());
   return *this;
 }
 
@@ -70,9 +61,9 @@ void DenseMatrix::mv (Vector const& x, Vector& y) const
 DenseMatrix& DenseMatrix::operator *=(DenseMatrix const& other) {
   using SizeType = DenseMatrix::size_type;
   
-  DenseMatrix old{*this};
-  
   assert( this->cols() == other.rows() );
+  
+  DenseMatrix old{*this};
   
   std::fill( data_.begin(), data_.end(), DenseMatrix::value_type{0} );
   
@@ -88,8 +79,7 @@ DenseMatrix& DenseMatrix::operator *=(DenseMatrix const& other) {
 }
 
 DenseMatrix operator*(DenseMatrix const& lhs, DenseMatrix const& rhs) {
-  auto tmp{lhs};
-  return tmp *= rhs;
+  return DenseMatrix{lhs} *= rhs;
 }
 
 std::ostream& operator<<(std::ostream& out, DenseMatrix const& other) {
