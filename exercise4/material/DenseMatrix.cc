@@ -13,8 +13,7 @@ DenseMatrix::DenseMatrix (size_type const rows, size_type const cols) : rows_(ro
 DenseMatrix::DenseMatrix (DenseMatrix const& other) : rows_(other.rows()), cols_(other.cols()), data_(other.data_) {}
 
 DenseMatrix& DenseMatrix::operator=(DenseMatrix const& other) {
-  data_.resize(other.data_.size());
-  std::copy(other.data_.begin(), other.data_.end(), data_.begin());
+  data_ = other.data_;
   return *this;
 }
 

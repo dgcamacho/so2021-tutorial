@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 
@@ -11,26 +12,20 @@ Vector::Vector (size_type const size) : data_(size,0) {}
 Vector::Vector (Vector const& other) : data_(other.data_) {}
 
 Vector& Vector::operator =(Vector const& other) {
-  data_.resize( other.size() );
-  std::copy( other.data_.begin(), other.data_.end(), data_.begin() ); 
-  
+  data_ = other.data_;
   return *this;
 }
 
 Vector& Vector::operator+=(Vector const& other) {
     assert( this->size() == other.size() );
-    for( size_type i{0}; i < size(); i++ ) {
-        (*this)[i] += other[i];
-    }
+    std::transform( data_.begin(), data_.end(), other.data_.begin(), data_.begin(), std::plus<Vector::value_type>{} );
 
     return *this;
 }
 
 Vector& Vector::operator-=(Vector const& other) {
     assert( this->size() == other.size() );
-    for( size_type i{0}; i < size(); i++ ) {
-        (*this)[i] -= other[i];
-    } 
+    std::transform( data_.begin(), data_.end(), other.data_.begin(), data_.begin(), std::minus<Vector::value_type>{} );
 
     return *this;
 }
