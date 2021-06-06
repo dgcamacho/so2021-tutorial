@@ -84,3 +84,5 @@ namespace scprog {
 
   };
 }
+
+#include "crs-matrix.impl.hh"
