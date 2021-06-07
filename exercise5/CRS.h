@@ -55,13 +55,20 @@ namespace scprog
           auto last = first + offset_[i];
           auto lower = std::lower_bound(first, last, j);
           auto aim = lower - first + row_pointer_[i];
-          bool value_exists = false;
-          for (auto x = 0; x < offset_[i]; ++i){
-            indices_[row_pointer_[i] + x] == j ? value_exists = true : 0;
-          }
-          if(value_exists)
+          if(value_exists(i, j))
           {values_[aim] += value;}
           else{
+            set(i, j, value);
+          }
+
+        }
+
+        void set(size_type i, size_type j, value_type value){
+          {
+            auto first = indices_.begin() + row_pointer_[i];
+            auto last = first + offset_[i];
+            auto lower = std::lower_bound(first, last, j);
+            auto aim = lower - first + row_pointer_[i];
             for (auto k = nonzero_entries_; k > aim; --k) {
               values_[k] = values_[k - 1];
               indices_[k] = indices_[k - 1];
@@ -71,11 +78,9 @@ namespace scprog
             nonzero_entries_ += 1;
             indices_[aim] = j;
             values_[aim] = value;
+
           }
-
         }
-
-        void set(size_type i, size_type j, value_type value);
 
         void compress(){
           this->indices_.resize(this->nonzero_entries_);
@@ -84,6 +89,13 @@ namespace scprog
 
         void mv(Vector const &x, Vector& y);
 
+        bool value_exists(size_type i, size_type j){
+          bool value_exists = false;
+          for (auto x = 0; x < offset_[i]; ++i){
+            indices_[row_pointer_[i] + x] == j ? value_exists = true : 0;
+          }
+          return value_exists;
+        }
 
     private:
         size_type rows_;
