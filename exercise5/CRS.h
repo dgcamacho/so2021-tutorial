@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include "Vector.hh"
 
 namespace scprog
 {
@@ -87,7 +88,17 @@ namespace scprog
           this->values_.resize(this->nonzero_entries_);
         };
 
-        void mv(Vector const &x, Vector& y);
+        void mv(scprog::Vector const &x, scprog::Vector& y){
+            assert(rows_ == y.size());
+            assert(cols_ == x.size());
+            for (std::size_t i = 0; i < rows_; ++i)
+            {
+              value_type f = 0;
+              for (std::size_t j = 0; j < cols_; ++j)
+                f += values_[i*cols_ + j] * x[j];
+              y[i] = f;
+            }
+          }
 
         bool value_exists(size_type i, size_type j){
           bool value_exists = false;

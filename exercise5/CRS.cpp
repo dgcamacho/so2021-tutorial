@@ -47,14 +47,8 @@ namespace scprog
 
         void add(size_type i, size_type j, value_type value)
         {
-          auto first = std::next(indices_.begin(), i*nmax_nonzero_);
-          auto last = std::next(first, offset_[i]);
-          //std::cout << first << " " << last << std::endl;
-          for (auto k = first; k < last; ++k){
-            std::cout << indices_[k] << std::endl;
-          }
 
-        }
+        };
 
         void set(size_type i, size_type j, value_type value);
 
