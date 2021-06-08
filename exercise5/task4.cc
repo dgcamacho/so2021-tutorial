@@ -118,6 +118,7 @@ namespace scprog
         return cols_;
     }
     
+    // finds the position of 'index' which is stored in parameter 'right' after leaving the function 
     template<class T>
     void CRSMatrix<T>::binary_search (size_type const index, size_type& left, size_type& right) {
         // binary search
@@ -157,7 +158,7 @@ namespace scprog
         // store the right index for potential shift
         size_t last = right;
 
-        // binary search
+        // binary search, position where to set new entry will be stored in 'right'
         binary_search(j, left, right);
 
         // if the index already exists
@@ -205,7 +206,7 @@ namespace scprog
         // store the right index for potential shift
         size_t last = right;
 
-        // binary search
+        // binary search, position where to set new entry will be stored in 'right'
         binary_search(j, left, right);
 
         // if the index already exists
