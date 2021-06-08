@@ -1,4 +1,4 @@
-#pragma one
+#pragma once
 
 #include <cassert>
 #include <iostream>
@@ -52,24 +52,17 @@ namespace scprog
 
         void add(size_type i, size_type j, value_type value)
         {
-          auto first = indices_.begin() + row_pointer_[i];
-          auto last = first + offset_[i];
-          auto lower = std::lower_bound(first, last, j);
-          auto aim = lower - first + row_pointer_[i];
+          auto aim = find_index(i, j);
           if(value_exists(i, j))
-          {values_[aim] += value;}
+            {values_[aim] += value;}
           else{
             set(i, j, value);
           }
-
         }
 
         void set(size_type i, size_type j, value_type value){
           {
-            auto first = indices_.begin() + row_pointer_[i];
-            auto last = first + offset_[i];
-            auto lower = std::lower_bound(first, last, j);
-            auto aim = lower - first + row_pointer_[i];
+            auto aim = find_index(i, j);
             for (auto k = nonzero_entries_; k > aim; --k) {
               values_[k] = values_[k - 1];
               indices_[k] = indices_[k - 1];
@@ -89,13 +82,13 @@ namespace scprog
         };
 
         void mv(scprog::Vector const &x, scprog::Vector& y){
-            assert(rows_ == y.size());
             assert(cols_ == x.size());
-            for (std::size_t i = 0; i < rows_; ++i)
+            for (size_type i = 0; i < rows_; ++i)
             {
               value_type f = 0;
-              for (std::size_t j = 0; j < cols_; ++j)
-                f += values_[i*cols_ + j] * x[j];
+              for (size_type j = 0; j < cols_; ++j)
+                if(value_exists(i, j)){
+                f += values_[row_pointer_[i] + j] * x[j];}
               y[i] = f;
             }
           }
@@ -108,6 +101,10 @@ namespace scprog
           return value_exists;
         }
 
+        value_type const& at(size_type i, size_type j){
+          return values_[find_index(i, j)];
+        }
+
     private:
         size_type rows_;
         size_type cols_;
@@ -118,17 +115,19 @@ namespace scprog
         std::vector<value_type> offset_;
         std::vector<value_type> row_pointer_;
 
-        auto binary_search(std::vector<size_type>::iterator const& first,
-                           std::vector<size_type>::iterator const& last,
-                           std::vector<size_type>::iterator const& wanted) const {
-          assert(last < indices_.end());
-          auto lower = std::lower_bound(first, last, wanted);
-          }
 
         void update_row_pointer(size_type n){
           for (size_type i = n + 1; i < rows_; ++i){
             row_pointer_[i] += 1;
           }
         }
+        size_type find_index(size_type i, size_type j){
+          auto first = indices_.begin() + row_pointer_[i];
+          auto last = first + offset_[i];
+          auto lower = std::lower_bound(first, last, j);
+          auto aim = lower - first + row_pointer_[i];
+          return aim;
+        }
+
     };
 }
