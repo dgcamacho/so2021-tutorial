@@ -49,9 +49,9 @@ namespace scprog
           return cols_;
         }
 
-
-        void add(size_type i, size_type j, value_type value)
-        {
+        //Add a value on given entry. If the entry was previously unset, it is set
+        void add(size_type i, size_type j, value_type value){
+          if (check_overflow(i, j)){
           auto aim = find_index(i, j);
           if(value_exists(i, j))
             {values_[aim] += value;}
@@ -59,7 +59,9 @@ namespace scprog
             set(i, j, value);
           }
         }
+        }
 
+        //Set an entry to given value
         void set(size_type i, size_type j, value_type value){
           {
             auto aim = find_index(i, j);
@@ -76,11 +78,13 @@ namespace scprog
           }
         }
 
+        //Remove all unfilled elements
         void compress(){
           this->indices_.resize(this->nonzero_entries_);
           this->values_.resize(this->nonzero_entries_);
         };
 
+        //Matrix-vector multiplication
         void mv(scprog::Vector const &x, scprog::Vector& y){
             assert(cols_ == x.size());
             for (size_type i = 0; i < rows_; ++i)
@@ -93,6 +97,7 @@ namespace scprog
             }
           }
 
+        //Check whether there exist a value
         bool value_exists(size_type i, size_type j){
           bool value_exists = false;
           for (auto x = 0; x < offset_[i]; ++i){
@@ -101,7 +106,13 @@ namespace scprog
           return value_exists;
         }
 
-        value_type const& at(size_type i, size_type j){
+        //Const access to value
+        value_type const& at(size_type i, size_type j) const {
+          return values_[find_index(i, j)];
+        }
+
+        //Mutable access to value
+        value_type& at(size_type& i, size_type j){
           return values_[find_index(i, j)];
         }
 
@@ -115,12 +126,14 @@ namespace scprog
         std::vector<value_type> offset_;
         std::vector<value_type> row_pointer_;
 
-
+        //Update row pointer on insertion
         void update_row_pointer(size_type n){
           for (size_type i = n + 1; i < rows_; ++i){
             row_pointer_[i] += 1;
           }
         }
+
+        //Find index of given matrix entry in values_/indices_ vector
         size_type find_index(size_type i, size_type j){
           auto first = indices_.begin() + row_pointer_[i];
           auto last = first + offset_[i];
@@ -129,5 +142,12 @@ namespace scprog
           return aim;
         }
 
+        bool check_overflow(size_type i, size_type j) const{
+          if(offset_[i] >= nmax_nonzero_){
+          #pragma message("Warning: Too many entries in current line. Omitting last entry.")
+            return false;
+          }
+          return true;
+        }
     };
 }
