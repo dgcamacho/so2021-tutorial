@@ -133,7 +133,7 @@ branch to the remote repository by `git push origin <zih-id>/exercise5`, 5. crea
 
 This time, the review will be done differently. After all submissions are received, you get assigned as reviewer to another submission. We have shown how to do a review in the past exercises. Now it's your turn. Details follow on the next exercise sheet.
 
-**Deadline for the submission: end of 2021/06/09**
+**Deadline for the submission: end of 2021/06/16**
 
 
 ## Extra Task 5 (GotW-1: Variable initialization -- or is it?)
