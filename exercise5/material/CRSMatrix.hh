@@ -21,17 +21,18 @@ namespace scprog
         // constructors
         public:
             // default constructors
-            explicit CRSMatrix():rows_{0}, cols_{0}, indices_{0}, 
-                                 values_{0}, offset_{0} {}
+            explicit CRSMatrix() = default;
             // constructor with given row-,col-size and maximum number of
             // non-zero entries per row
             explicit CRSMatrix(size_type nrows, size_type ncols, 
                                size_type nmax_nonzero): 
-                                             rows_{nrows}, cols_{ncols}, 
+                                             rows_{nrows}, 
+                                             cols_{ncols}, 
                                              nmax_nonzero_{nmax_nonzero},
                                              indices_(nrows*nmax_nonzero),
                                              values_(nrows*nmax_nonzero), 
-                                             offset_(nrows) {}
+                                             offset_(nrows) 
+                                             {}
             
         // class functions
         public:
@@ -145,7 +146,7 @@ namespace scprog
                         values_.erase(values_.begin() + k - 1);
 
                     }
-                } 
+                }
             }
 
             // calculate y = A*x
@@ -159,7 +160,8 @@ namespace scprog
                     if (offset_[i] == size_type(0)) {
                         y[i] = value_type(0);
                     } else {
-                        size_type lower_bound = offset_[i - 1];
+                        // catching first row distance with conditional op.
+                        size_type lower_bound = (i != 0) ? offset_[i - 1] : 0;
                         size_type upper_bound = lower_bound + offset_[i];
                         
                         for (size_type j = lower_bound; j < upper_bound; ++j) {
