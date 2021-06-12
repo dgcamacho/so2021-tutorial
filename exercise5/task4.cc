@@ -35,14 +35,14 @@ namespace scprog
     // return the number of columns
     size_type cols () const;
 
-    // add a nonzero entry at (i,j) to the matrix
-    void add (size_type i, size_type j, value_type value);
-
     // set a nonzero entry at (i,j) in the matrix (replace existing value)
     void set (size_type i, size_type j, value_type value);
 
     // get the value at (i, j) before the matrix got compressed
     value_type get (size_t i, size_t j);
+
+    // add a nonzero entry at (i,j) to the matrix
+    void add (size_type i, size_type j, value_type value);
 
     // remove all gaps and zeros in the internal storage
     void compress (); 
@@ -69,15 +69,15 @@ namespace scprog
     };
 
     template<class T>
-    CRSMatrix<T>::CRSMatrix (size_type rows, size_type cols, size_type max_non_zeros) {
-        minus_one = rows * max_non_zeros;
-        rows_ = rows;
-        cols_ = cols; 
-        max_non_zeros_ = max_non_zeros;
-        indices_ = std::vector<size_t>(rows*max_non_zeros,0.0);
-        values_ = std::vector<value_type>(rows*max_non_zeros,0.0);
-        offset_ = std::vector<size_t>(rows,0.0);
-    }
+    CRSMatrix<T>::CRSMatrix (size_type rows, size_type cols, size_type max_non_zeros) 
+          : rows_(rows)
+          , cols_(cols)
+          , max_non_zeros_(max_non_zeros)
+          , minus_one(rows*max_non_zeros)
+          , indices_(rows*max_non_zeros,0.0)
+          , values_(rows*max_non_zeros,0.0)
+          , offset_(rows,0.0)
+    { }
     
     // mutable access to the matrix entries
     template<class T>
@@ -123,7 +123,7 @@ namespace scprog
         return cols_;
     }
     
-    // finds the position of 'index' which is stored in parameter 'right' after leaving the function 
+    // Binary search: finds the position of 'index' which is stored in parameter 'left' after leaving the function 
     template<class T>
     typename CRSMatrix<T>::size_type CRSMatrix<T>::binary_search (size_type const index, size_type& left, size_type& right) {
         // if the value is the first one to be set in this row (offset is 0)
@@ -303,14 +303,12 @@ namespace scprog
         }
     }
 
-
 } // end of namespace scprog
 
 using namespace scprog;
 
 int main () {
     CRSMatrix<double> matrix = CRSMatrix<double>(3,3,3);
-    matrix.print_uncompressed();
     matrix.set(0,0,2.0);
     matrix.set(1,2,-1.0);
     matrix.set(1,0,-1.0);
@@ -318,10 +316,12 @@ int main () {
     matrix.set(2,1,-1.0);
     matrix.add(2,2,1.0);
     matrix.add(2,2,1.0);
+    std::cout << "\nUncompressed output:\n";
     matrix.print_uncompressed();
 
     matrix.compress();
-    std::cout << "\n\nM =\n"; 
+
+    std::cout << "\n\n\nTest the implementation of the CRSMatrix\n\nM =\n"; 
     matrix.print();
 
     // initialize the rhs vector b
@@ -334,5 +334,4 @@ int main () {
     matrix.mv(x, y);
     std::cout << "\ny = ";
     y.print();
-
 }
