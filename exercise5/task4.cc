@@ -41,6 +41,9 @@ namespace scprog
     // set a nonzero entry at (i,j) in the matrix (replace existing value)
     void set (size_type i, size_type j, value_type value);
 
+    // get the value at (i, j) before the matrix got compressed
+    value_type get (size_t i, size_t j);
+
     // remove all gaps and zeros in the internal storage
     void compress (); 
 
@@ -52,9 +55,10 @@ namespace scprog
     void print ();
 
     private:
-    void binary_search (size_type const index, size_type& left, size_type& right);
+    size_type binary_search (size_type const index, size_type& left, size_type& right);
 
     private:
+    size_type minus_one;
     std::size_t rows_;
     std::size_t cols_;
     std::size_t max_non_zeros_;
@@ -66,6 +70,7 @@ namespace scprog
 
     template<class T>
     CRSMatrix<T>::CRSMatrix (size_type rows, size_type cols, size_type max_non_zeros) {
+        minus_one = rows * max_non_zeros;
         rows_ = rows;
         cols_ = cols; 
         max_non_zeros_ = max_non_zeros;
@@ -120,16 +125,33 @@ namespace scprog
     
     // finds the position of 'index' which is stored in parameter 'right' after leaving the function 
     template<class T>
-    void CRSMatrix<T>::binary_search (size_type const index, size_type& left, size_type& right) {
-        // binary search
-        while (right > left) {
-            if (indices_[(left+right)/2] < index) {
-                left = (left+right)/2 + 1;
-            }
-            else {
-                right = (left+right)/2 - 1;
+    typename CRSMatrix<T>::size_type CRSMatrix<T>::binary_search (size_type const index, size_type& left, size_type& right) {
+        // if the value is the first one to be set in this row (offset is 0)
+        if (left == right) 
+            return minus_one;
+
+        // only repeat while left < right and not <= to make sure that the 
+        // indices left an right won't overlap
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (indices_[mid] == index) {
+                return mid;
+            } else if (indices_[mid] < index) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
         }
+
+        if (left == right) {
+            int mid = left;
+            if (indices_[mid] == index) {
+                return mid;
+            }
+        }
+
+        return minus_one;
     }
 
     // add a nonzero entry at (i,j) to the matrix
@@ -155,15 +177,15 @@ namespace scprog
             return;
         }
 
-        // store the right index for potential shift
-        size_t last = right;
+        // store the right index for later use
+        size_type last = right;
 
         // binary search, position where to set new entry will be stored in 'right'
-        binary_search(j, left, right);
+        size_type insert_index = binary_search(j, left, right);
 
         // if the index already exists
-        if (indices_[right] == j) {
-            values_[right] = value;
+        if (insert_index != minus_one) {
+            values_[insert_index] = value;
             return;
         }
 
@@ -180,8 +202,25 @@ namespace scprog
         offset_[i] += 1;
     }
 
+    // get the value at (i, j) before the matrix got compressed
     template<class T>
+    typename CRSMatrix<T>::value_type CRSMatrix<T>::get (size_t i, size_t j) {
+        size_t left = i * max_non_zeros_;   // index of first value in indices_ and values_
+        size_t right = left + offset_[i];   // index of last value in indices_ and values_
+
+        // binary search, position where to set new entry will be stored in 'right'
+        size_t insert_index = binary_search(j, left, right);
+
+        // if the index does not yet exist
+        if (insert_index == minus_one)
+            return 0;
+
+        // else: index exists already, so return the value at this position
+        return values_[insert_index];
+    }
+
     // set a nonzero entry at (i,j) in the matrix (replace existing value)
+    template<class T>
     void CRSMatrix<T>::add (size_type i, size_type j, value_type value) {
         if (i > rows_ - 1 || j > cols_) {
             std::cout << "ERROR: index out of bounds" << std::endl;
@@ -192,40 +231,8 @@ namespace scprog
             return;
         }
 
-        size_t left = i * max_non_zeros_;   // index of first value in indices_ and values_
-        size_t right = left + offset_[i];   // index of last value in indices_ and values_
-        
-        // if the value is the first one to be set in this row (offset is 0)
-        if (left == right) {
-            indices_[right] = j;
-            values_[right] = value;
-            offset_[i] += 1;
-            return;
-        }
-
-        // store the right index for potential shift
-        size_t last = right;
-
-        // binary search, position where to set new entry will be stored in 'right'
-        binary_search(j, left, right);
-
-        // if the index already exists
-        if (indices_[right] == j) {
-            values_[right] += value;
-            return;
-        }
-
-        // shift values to the right
-        for (size_t k = last; k > right; --k) {
-            indices_[k] = indices_[k-1];
-            values_[k] = values_[k-1];
-            values_[k-1] = 0;
-        }
-
-        // insert new index and value, and update the corresponding offset
-        indices_[left] = j;
-        values_[left] = value;
-        offset_[i] += 1;
+        // to avoid copying code, use the implemented set and get functions for adding a value
+        (*this).set(i, j, value + (*this).get(i, j));
     }
 
     // remove all gaps and zeros in the internal storage
@@ -288,17 +295,8 @@ namespace scprog
     template<class T>
     void CRSMatrix<T>::print () {
         for (int i=0; i<rows_; ++i) {
-            int upper_bound = offset_[i+1];
-            if (i == rows_ - 1) {
-                upper_bound = values_.size();
-            }
             for (int j=0; j<cols_; ++j) {
-                value_type matrix_entry = 0;
-                for (size_type ix = offset_[i]; ix < upper_bound; ++ix) {
-                    if (indices_[ix] == j) {
-                        matrix_entry = values_[ix];
-                    }
-                }
+                value_type matrix_entry = this->operator()(i,j);
                 std::cout << std::setprecision(3) << std::setw(6) << matrix_entry  << " ";
             }
             std::cout << std::endl;
@@ -313,12 +311,13 @@ using namespace scprog;
 int main () {
     CRSMatrix<double> matrix = CRSMatrix<double>(3,3,3);
     matrix.print_uncompressed();
-    matrix.add(1,2,4.0);
-    matrix.add(1,1,5.0);
-    matrix.add(1,1,6.0);
-    matrix.add(2,2,7.0);
-    matrix.add(2,1,8.0);
-    matrix.add(2,0,9.0);
+    matrix.set(0,0,2.0);
+    matrix.set(1,2,-1.0);
+    matrix.set(1,0,-1.0);
+    matrix.set(0,1,-1.0);
+    matrix.set(2,1,-1.0);
+    matrix.add(2,2,1.0);
+    matrix.add(2,2,1.0);
     matrix.print_uncompressed();
 
     matrix.compress();
