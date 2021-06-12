@@ -7,6 +7,7 @@
 
 namespace scprog
 {
+    // Forward declaration
     class Vector;
 
     template <typename T>
@@ -36,7 +37,7 @@ namespace scprog
                 nonzero_entries_{0}
                 {}
 
-        // class functions
+        // Class functions
     public:
 
         size_type rows() const
@@ -49,7 +50,7 @@ namespace scprog
           return cols_;
         }
 
-        //Add a value on given entry. If the entry was previously unset, it is set
+        // Add a value on given entry. If the entry was previously unset, it is set
         void add(size_type i, size_type j, value_type value){
           if (check_overflow(i, j)){
           auto aim = find_index(i, j);
@@ -61,10 +62,12 @@ namespace scprog
         }
         }
 
-        //Set an entry to given value
+        // Set an entry to given value
         void set(size_type i, size_type j, value_type value){
           {
             auto aim = find_index(i, j);
+            if (value_exists(i, j)) { values_[aim] = value; }
+            else {
             for (auto k = nonzero_entries_; k > aim; --k) {
               values_[k] = values_[k - 1];
               indices_[k] = indices_[k - 1];
@@ -74,44 +77,45 @@ namespace scprog
             nonzero_entries_ += 1;
             indices_[aim] = j;
             values_[aim] = value;
-
+            }
           }
         }
 
-        //Remove all unfilled elements
+        // Remove all unfilled elements
         void compress(){
           this->indices_.resize(this->nonzero_entries_);
           this->values_.resize(this->nonzero_entries_);
         };
 
-        //Matrix-vector multiplication
+        // Matrix-vector multiplication
+        // todo use Boost library for zip expression
         void mv(scprog::Vector const &x, scprog::Vector& y){
-            assert(cols_ == x.size());
-            for (size_type i = 0; i < rows_; ++i)
+            assert(cols_ == x.size() && x.size() == y.size());
+            unsigned k{0}, current_row{0};
+            for (auto entry : indices_)
             {
-              value_type f = 0;
-              for (size_type j = 0; j < cols_; ++j)
-                if(value_exists(i, j)){
-                f += values_[row_pointer_[i] + j] * x[j];}
-              y[i] = f;
+              current_row < k ? ++current_row : 0;
+              y[current_row] += values_[k] * x[entry];
+              ++k; // Not very elegant, yet easy solution to keep track of index
             }
           }
 
-        //Check whether there exist a value
+        // Check whether there exist a value
         bool value_exists(size_type i, size_type j){
           bool value_exists = false;
-          for (auto x = 0; x < offset_[i]; ++i){
+          // Iterate over indices_ and get value_ by index. Could use the zip function from boost instead
+          for (auto x = row_pointer_[i]; x < row_pointer_[(i + 1)]; ++i){
             indices_[row_pointer_[i] + x] == j ? value_exists = true : 0;
           }
           return value_exists;
         }
 
-        //Const access to value
+        // Const access to value
         value_type const& at(size_type i, size_type j) const {
           return values_[find_index(i, j)];
         }
 
-        //Mutable access to value
+        // Mutable access to value
         value_type& at(size_type& i, size_type j){
           return values_[find_index(i, j)];
         }
@@ -121,19 +125,19 @@ namespace scprog
         size_type cols_;
         size_type nmax_nonzero_;
         size_type nonzero_entries_;
-        std::vector<value_type> indices_;
+        std::vector<size_type> indices_;
         std::vector<value_type> values_;
-        std::vector<value_type> offset_;
-        std::vector<value_type> row_pointer_;
+        std::vector<size_type> offset_;
+        std::vector<size_type> row_pointer_;
 
-        //Update row pointer on insertion
+        // Update row pointer on insertion
         void update_row_pointer(size_type n){
           for (size_type i = n + 1; i < rows_; ++i){
             row_pointer_[i] += 1;
           }
         }
 
-        //Find index of given matrix entry in values_/indices_ vector
+        // Find index of given matrix entry in values_/indices_ vector
         size_type find_index(size_type i, size_type j){
           auto first = indices_.begin() + row_pointer_[i];
           auto last = first + offset_[i];
@@ -142,6 +146,7 @@ namespace scprog
           return aim;
         }
 
+        // Check whether a column is already filled
         bool check_overflow(size_type i, size_type j) const{
           if(offset_[i] >= nmax_nonzero_){
           #pragma message("Warning: Too many entries in current line. Omitting last entry.")
