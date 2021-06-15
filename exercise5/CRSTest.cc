@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "CRSMatrix.hh"
-#include "binary_test.cc"
 
 
 int main() {
@@ -15,6 +14,7 @@ int main() {
     std::vector<int> y(3, 0);
     A.mv(x, y);
 
+    std::cout << "Computed result is ";
     for (int i = 0; i < y.size(); ++i){
         std::cout << y[i] << ' ';
     }

@@ -8,6 +8,7 @@
 // REQUIRES vec to contain only unique entries of a LessThanComparable type and to be ordered
 // RETURNS std::tuple<index where the element is/should be, element_found_flag>
 template <typename size_type, typename value_type>
+
 std::tuple<value_type, bool> binary_search(std::vector<value_type> vec, size_type start, size_type stop, value_type value) {
     // while the remaining block to search in is nonempty
     while (start <= stop)
