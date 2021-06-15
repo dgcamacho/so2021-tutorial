@@ -29,7 +29,6 @@ std::tuple<value_type, bool> binary_search(std::vector<value_type> vec, size_typ
             }
         }
     }
-
     // element not found
     return {start, false};
 }

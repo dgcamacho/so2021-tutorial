@@ -28,4 +28,8 @@ void binary_search_tests() {
     bs_return = binary_search(v1, 1, 4, 8);
     assert(std::get<1>(bs_return) == false);
     assert(std::get<0>(bs_return) == 5);
+
+    std::vector<int> v2{0, 0, 0, 0, 0};
+    bs_return = binary_search(v2, 0, -1, 0);
+    assert(std::get<1>(bs_return) == false);
 }
