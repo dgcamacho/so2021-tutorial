@@ -25,40 +25,11 @@
 // 5. On `compress()` all three vectors should be transformed into the final format. Therefore traverse
 //    row-wise, accumulate the row-sizes to get the offset, and collect only those entries in `indices` and `values`
 //    that are stored in each row.
+#pragma once
 
 #include <vector>
 #include <tuple>
-
-// binary search through indices [start, stop] of an ordered std::vector<>
-// return the index i such that vec[i] <= value < vec[i+1]
-// REQUIRES vec to contain only unique entries of a LessThanComparable type and to be ordered
-// RETURNS std::tuple<index where the element is/should be, element_found_flag>
-template <class value_type, class size_type>
-std::tuple<size_type, bool> binary_search(std::vector<value_type> vec, size_type start, size_type stop, value_type value) {
-    // while the remaining block to search in is nonempty
-    while (start <= stop)
-    {
-        // calculate pivot index
-        int middle = start + ((stop - start) / 2);
-
-        // check for direct match
-        if (vec[middle] == value){
-            return {middle, true};
-        }
-        else {
-            // set searchblock to left or right half as neccessary
-            if (value < vec[middle]){
-                stop = middle - 1;
-            }
-            else {
-                start = middle + 1;
-            }
-        }
-    }
-
-    // element not found
-    return {start, false};
-}
+#include "BinarySearch.cc"
 
 template <class T>
 class CRSMatrix{
@@ -112,6 +83,7 @@ class CRSMatrix{
                 _values.insert(it, value);
                 it = _indices.begin() + index;
                 _indices.insert(it, col);
+                _offset[row] += 1;
             }
         }
 
@@ -127,6 +99,7 @@ class CRSMatrix{
                 _values.insert(it, value);
                 it = _indices.begin() + index;
                 _indices.insert(it, col);
+                _offset[row] += 1;
             }
         }
 
@@ -135,6 +108,16 @@ class CRSMatrix{
 
         // y := A * x
         void mv(std::vector<value_type> const& x, std::vector<value_type>& y);
+
+        void print() {
+            for (size_type i = 0; i < _nr; ++i)
+            {
+                for (size_type j = 0; j < _offset[i]; ++j)
+                {
+                    std::cout << '(' << i << ", " << _indices[j] << ") : " << _values[j] << "\n";
+                }
+            }
+        }
 
     private:
         size_type _max_nz;

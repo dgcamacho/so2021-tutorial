@@ -1,3 +1,10 @@
+#include <iostream>
+
+#include "CRSMatrix.hh"
+#include "binary_test.cc"
+
+
 int main() {
- return 0;   
+    // run tests for binary search
+    binary_search_tests();
 }
