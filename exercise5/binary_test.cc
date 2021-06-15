@@ -5,6 +5,7 @@
 
 #include "BinarySearch.cc"
 
+// test only
 void binary_search_tests() {
     std::tuple<int, bool> bs_return;
     

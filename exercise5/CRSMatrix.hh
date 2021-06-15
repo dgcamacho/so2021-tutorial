@@ -132,8 +132,7 @@ class CRSMatrix{
             }
             else {
                 // do not insert zero values
-                if (value != 0)
-                {
+                if (value != 0){
                     auto it = _values.begin() + row_offset + index;
                     _values.insert(it, value);
                     auto it2 = _indices.begin() + row_offset + index;
@@ -143,12 +142,26 @@ class CRSMatrix{
             }
         }
 
+        void mv(std::vector<value_type> const& x, std::vector<value_type>& y){
+            if (_nc != x.size() || _nr != y.size()){
+                throw std::invalid_argument("Vector sizes do not match.");
+            }
+
+            size_type running_offset = 0;
+            for (size_type i = 0; i < _nr; ++i){
+                y[i] = 0;
+                for (size_type j = 0; j < _offset[i]; ++j){
+                    y[i] += _values[running_offset + j] * x[_indices[running_offset + j]];
+                }
+                running_offset += _offset[i];
+            }
+        }
+
         // compress storage
         void compress() {
             // calculate actual maximum nonzero size
             size_type new_max_nz = 0;
-            for (size_type i = 0; i < _nr; ++i)
-            {
+            for (size_type i = 0; i < _nr; ++i){
                 new_max_nz = std::max(new_max_nz, _offset[i]);
             }
             _max_nz = new_max_nz;
@@ -182,7 +195,6 @@ class CRSMatrix{
             return _nr;
         }
         // y := A * x
-        void mv(std::vector<value_type> const& x, std::vector<value_type>& y);
 
         void print() {
             std::cout << "Printing current state.\n_indices = ";
