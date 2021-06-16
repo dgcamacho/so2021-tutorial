@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "SparseMatrix.hh"
+#include "CRSMatrix.hh"
 #include "Vector.hh"
 
 using namespace scprog;

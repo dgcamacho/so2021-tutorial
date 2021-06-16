@@ -33,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wvolatile-register-var")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_DEBUG_FLAGS} -DDEBUG -ggdb3")
 
-file(GLOB SOURCE  Vector.cc CRSMatrix.cc task4.cc)
+file(GLOB SOURCE  Vector.cc task4.cc)
 
 add_executable(CRSMatrixTest ${SOURCE})
 
