@@ -17,7 +17,7 @@ public:
     Vec x(y.size());
     x = 0.0;
 
-    Vec r = y - A * x;
+    Vec r = b - A * x;
     Vec p = r;
 
     for (std::size_t i = 0; i < maxIt_; ++i)
