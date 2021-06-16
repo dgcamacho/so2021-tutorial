@@ -1,6 +1,5 @@
 template < typename T >
 bool CRSMatrix<T>::entryExists( size_type const i, size_type const j ) const {
-  // If the last row is considerred, indices.begin() + (i+1) * colCount may be != indices.end(), thus special case
   // search in the corresponding subrange in indices if the entry "j" exists or not
 	return std::binary_search( indices.begin() + i*maxNonzeroPerRow, indices.begin() + i*maxNonzeroPerRow + offset[i], j );
 }
