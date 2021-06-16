@@ -23,8 +23,8 @@ class CRSMatrix {
 		CRSMatrix( size_type rowCnt, size_type colCnt, size_type maxNonZeroEntriesPerRow )
       : values(colCnt * maxNonZeroEntriesPerRow), indices(colCnt * maxNonZeroEntriesPerRow), offset(rowCnt, 0), rowCount(rowCnt), colCount(colCnt), maxNonzeroPerRow(maxNonZeroEntriesPerRow) {}
 		
-		void add( size_type i, size_type j, value_type value );
-		void set( size_type i, size_type j, value_type value );
+		void add( size_type const i, size_type const j, value_type const value );
+		void set( size_type const i, size_type const j, value_type const value );
 		
 		void compress();
 		
@@ -34,9 +34,9 @@ class CRSMatrix {
     friend std::ostream& operator<<(std::ostream& out, CRSMatrix<U> const& other);
 	
 	private:
-		bool entryExists( size_type i, size_type j ) const;
-		size_type findValuesIndex( size_type i, size_type j ) const;
-		void insertEntry( size_type i, size_type j, value_type value );
+		bool entryExists( size_type const i, size_type const j ) const;
+		size_type findValuesIndex( size_type const i, size_type const j ) const;
+		void insertEntry( size_type const i, size_type const j, value_type const value );
 	
 		std::vector<T> 	values;
 		std::vector<size_type>  indices, offset;

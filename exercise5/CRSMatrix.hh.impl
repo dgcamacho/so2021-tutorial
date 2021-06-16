@@ -1,35 +1,32 @@
+
 template < typename T >
-bool CRSMatrix<T>::entryExists( size_type i, size_type j ) const {
+bool CRSMatrix<T>::entryExists( size_type const i, size_type const j ) const {
   // If the last row is considerred, indices.begin() + (i+1) * colCount may be != indices.end(), thus special case
-  // search in the corresponding subrange in indices if the entry "j" exists or not (no binary search as in the range may be zeros after the greatest col-index with an entry)
-  auto const result = std::find( indices.begin() + i*maxNonzeroPerRow, indices.begin() + i*maxNonzeroPerRow + offset[i], j );
-  // std::find returns result = final iterator if the value is not found
-	return result != indices.begin() + i*maxNonzeroPerRow + offset[i];
+  // search in the corresponding subrange in indices if the entry "j" exists or not
+	return std::binary_search( indices.begin() + i*maxNonzeroPerRow, indices.begin() + i*maxNonzeroPerRow + offset[i], j );
 }
+
+// finds for an existing entry the index k for the values-vector
 template < typename T >
-typename CRSMatrix<T>::size_type CRSMatrix<T>::findValuesIndex( CRSMatrix::size_type i, CRSMatrix::size_type j ) const {
+typename CRSMatrix<T>::size_type CRSMatrix<T>::findValuesIndex( size_type const i, size_type const j ) const {
 	assert( entryExists(i,j) );
 	
-  // ternary ? -> similar to entryExists
   // std::find returns an iterator
 	auto const valueIterator = std::find( indices.begin() + i*maxNonzeroPerRow, indices.begin() + i*maxNonzeroPerRow + offset[i], j );
 	return std::distance( indices.begin(), valueIterator );
 }
 
 template < typename T >
-void CRSMatrix<T>::insertEntry( CRSMatrix::size_type i, CRSMatrix::size_type j, CRSMatrix::value_type value ) {
-  using size_type = CRSMatrix::size_type;
-  
-	assert( ! entryExists(i,j) );
+void CRSMatrix<T>::insertEntry( size_type const i, size_type const j, value_type const value ) {
+  assert( ! entryExists(i,j) );
 	
-  // ternary ? -> similar to entryExists
 	auto const indicesInsertPos = std::lower_bound( indices.begin() + i*maxNonzeroPerRow, indices.begin() + i*maxNonzeroPerRow + offset[i], j );
   size_type const k = std::distance( indices.begin(), indicesInsertPos );
   
   // use the meaning of maxNonZeroEntriesPerRow
   //  indices = [ 0 ... i*maxNonZeroEntriesPerRow i*maxNonZeroEntriesPerRow+1 i*maxNonZeroEntriesPerRow+2 ... i*maxNonZeroEntriesPerRow+maxNonZeroEntriesPerRow-1 (i+1)*maxNonZeroEntriesPerRow ... ]
   //                                                                              |                             |
-  //                                                                              +-- e.g. k                    +---- zero, i.e. can be overwritten, as the last entry in the row, and (i,j) does not exist
+  //                                                                              +-- e.g. k                    +---- zero, i.e. can be overwritten as (i,j) does not (yet) exist
   // move all indices and values by 1 from k to (i+1)*maxNonZeroEntriesPerRow-1
   for( size_type l = (i+1) * maxNonzeroPerRow - 1; l > k; l-- ) {
     values[l] = values[l-1];
@@ -39,12 +36,12 @@ void CRSMatrix<T>::insertEntry( CRSMatrix::size_type i, CRSMatrix::size_type j, 
   values[k] = value;
   indices[k] = j;
 	
-	//update offset, starting at i+1
+	//update offset
 	offset[i]++;
 }
 
 template < typename T >
-void CRSMatrix<T>::add( CRSMatrix::size_type i, CRSMatrix::size_type j, CRSMatrix::value_type value) {
+void CRSMatrix<T>::add( size_type const i, size_type const j, value_type const value) {
 	if( entryExists( i,j ) ) {
 		values[ findValuesIndex(i,j) ] += value;
 	}
@@ -54,7 +51,7 @@ void CRSMatrix<T>::add( CRSMatrix::size_type i, CRSMatrix::size_type j, CRSMatri
 }
 
 template < typename T >
-void CRSMatrix<T>::set( CRSMatrix::size_type i, CRSMatrix::size_type j, CRSMatrix::value_type value) {
+void CRSMatrix<T>::set( size_type const i, size_type const j, value_type const value) {
 	if( entryExists( i,j ) ) {
 		values[ findValuesIndex(i,j) ] = value;
 	}
@@ -67,10 +64,10 @@ template < typename T >
 void CRSMatrix<T>::compress() {
   using size_type = CRSMatrix::size_type;
   
-  //dense values & indices - copy all nonzero into a contiguous block.
+  //dense values & indices - copy all data indicating a nonzero matrix element into a contiguous block.
   size_type j = 0;
-  for( size_type k = 0; k < offset.size(); k++ ) {
-    for( size_type i = 0; i < offset[k]; i++ ) {
+  for( size_type k = 0; k < offset.size(); k++ ) { //for each row k
+    for( size_type i = 0; i < offset[k]; i++ ) {   //move the first offset[k] elements
       values[j] = values[k*maxNonzeroPerRow+i];
       indices[j++] = indices[k*maxNonzeroPerRow+i];
     }
@@ -89,16 +86,14 @@ void CRSMatrix<T>::compress() {
 
 template < typename T >
 void CRSMatrix<T>::mv( Vector const& x, Vector& y ) const {
-  using size_type = CRSMatrix<T>::size_type;
-  
   //size constraint
 	assert( x.size() == y.size() && colCount == x.size() );
   //compressed only
-  // potential bug: compressed matrix
+  // potential bug: dense matrix
   assert( indices.size() < rowCount * maxNonzeroPerRow );
 	
 	//initialize y with 0
-	y.fill( CRSMatrix::value_type{0} );
+	y.fill( value_type{0} );
 	
 	//store current offset-index to access the correct row
 	size_type i = 0;
@@ -115,13 +110,15 @@ template < typename T >
 std::ostream& operator<<(std::ostream& out, CRSMatrix<T> const& other) {
   using size_type = CRSMatrix<T>::size_type;
 
+  bool const isCompressed = other.indices.size() < other.rowCount * other.maxNonzeroPerRow;
   size_type k = 0;
   for( size_type i = 0; i < other.rowCount; i++ ) {
     for( size_type j = 0; j < other.colCount; j++ ) {
       // differ between compressed / uncompressed state
       // potential bug: dense matrix
-      if( other.indices.size() < other.rowCount * other.maxNonzeroPerRow ) {
+      if( isCompressed ) {
         //prints the corresponding entry or 0
+        //entryExists does only work for the uncompressed state
         if( other.offset[i] <= k and other.indices[k] == j ) {
           out << std::setw(10) << other.values[k++] << ' ';
         }

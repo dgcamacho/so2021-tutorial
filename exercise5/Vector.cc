@@ -9,12 +9,6 @@
 namespace scprog {
 
 Vector::Vector (size_type const size) : data_(size,0) {}
-Vector::Vector (Vector const& other) : data_(other.data_) {}
-
-Vector& Vector::operator =(Vector const& other) {
-  data_ = other.data_;
-  return *this;
-}
 
 Vector& Vector::operator+=(Vector const& other) {
     assert( this->size() == other.size() );
@@ -48,7 +42,7 @@ Vector& Vector::operator/=(Vector::value_type const factor) {
 
 Vector::value_type& Vector::operator[] (size_type const i)
 {
-    assert(i < size() );
+    assert( i < size() );
     return data_[i];
 }
 
@@ -64,8 +58,7 @@ void Vector::fill( Vector::value_type val ) {
   std::fill( data_.begin(), data_.end(), val );
 }
 
-Vector::size_type Vector::size () const
-{
+Vector::size_type Vector::size () const {
     return data_.size();
 }
 

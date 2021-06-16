@@ -17,9 +17,6 @@ namespace scprog
   public:
     // construct and initialize the matrix of size rows x cols
     Vector (size_type size);
-    Vector (Vector const&);
-    
-    Vector& operator =(Vector const&);
 
     Vector& operator+=(Vector const&);
     Vector& operator-=(Vector const&);
