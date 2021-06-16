@@ -41,12 +41,17 @@ class CRSMatrix {
 
 template < typename T >
 bool CRSMatrix<T>::entryExists( size_type i, size_type j ) const {
+  // If the last row is empty, offset[i] points to non-existing elements in indices, thus special case for offset[i] == indices.size() (1st argument)
+  // If the last row is considerred, offset[i+1] does not exist, thus use indices.end() explicitely (2nd argument)
+  // binary_search in the corresponding subrange in indices if the entry "j" exists or not
 	return std::binary_search( offset[i] == indices.size() ? indices.end() : indices.begin() + offset[i], i+1 == offset.size() ? indices.end() : indices.begin() + offset[i+1], j );
 }
 template < typename T >
 typename CRSMatrix<T>::size_type CRSMatrix<T>::findValuesIndex( CRSMatrix::size_type i, CRSMatrix::size_type j ) const {
 	assert( entryExists(i,j) );
 	
+  // ternary ? -> similar to entryExists
+  // std::find returns an iterator
 	auto const valueIterator = std::find( offset[i] == indices.size() ? indices.end() : indices.begin() + offset[i], i == offset.size() ? indices.end() : indices.begin() + offset[i+1] , j );
 	return std::distance( indices.begin(), valueIterator );
 }
@@ -55,6 +60,7 @@ template < typename T >
 void CRSMatrix<T>::insertEntry( CRSMatrix::size_type i, CRSMatrix::size_type j, CRSMatrix::value_type value ) {
 	assert( ! entryExists(i,j) );
 	
+  // ternary ? -> similar to entryExists
 	auto indicesInsertPos = std::lower_bound( offset[i] == indices.size() ? indices.end() : indices.begin() + offset[i], i+1 == offset.size() ? indices.end() : indices.begin() + offset[i+1], j );
 	values.insert( values.begin() + std::distance( indices.begin(), indicesInsertPos) , value ); // insert value at the same position as in indices - std::distance() returns the index
 	indices.insert( indicesInsertPos, j ); // inserts j BEFORE the position pointed at by indicesInsertPos
@@ -110,6 +116,7 @@ std::ostream& operator<<(std::ostream& out, CRSMatrix<T> const& other) {
   size_type k = 0;
   for( size_type i = 0; i < other.rowCount; i++ ) {
     for( size_type j = 0; j < other.colCount; j++ ) {
+      //prints the corresponding entry or 0
       if( other.offset[i] <= k and other.indices[k] == j ) {
         out << std::setw(10) << other.values[k++] << ' ';
       }
