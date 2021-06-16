@@ -1,4 +1,3 @@
-
 template < typename T >
 bool CRSMatrix<T>::entryExists( size_type const i, size_type const j ) const {
   // If the last row is considerred, indices.begin() + (i+1) * colCount may be != indices.end(), thus special case
@@ -87,7 +86,7 @@ void CRSMatrix<T>::compress() {
 template < typename T >
 void CRSMatrix<T>::mv( Vector const& x, Vector& y ) const {
   //size constraint
-	assert( x.size() == y.size() && colCount == x.size() );
+	assert( x.size() == colCount && rowCount == y.size() );
   //compressed only
   // potential bug: dense matrix
   assert( indices.size() < rowCount * maxNonzeroPerRow );
