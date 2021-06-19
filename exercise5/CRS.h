@@ -108,7 +108,7 @@ namespace scprog
         bool value_exists(size_type i, size_type j){
           bool value_exists = false;
           // Iterate over indices_ and get value_ by index. Could use the zip function from boost instead
-          for (auto x = row_pointer_[i]; x < row_pointer_[(i + 1)]; ++i){
+          for (auto x = row_pointer_[i]; x < row_pointer_[i] + offset_[i]; ++x){
             indices_[row_pointer_[i] + x] == j ? value_exists = true : 0;
           }
           return value_exists;
