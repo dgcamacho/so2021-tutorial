@@ -91,12 +91,16 @@ namespace scprog
         // todo use Boost library for zip expression
         void mv(scprog::Vector const &x, scprog::Vector& y){
             assert(cols_ == x.size() && x.size() == y.size());
-            unsigned k{0}, current_row{0};
-            for (auto entry : indices_)
+            // iteration over rows
+            for (size_type current_row = 0; current_row < rows_; ++current_row)
             {
-              current_row < k ? ++current_row : 0;
-              y[current_row] += values_[k] * x[entry];
-              ++k; // Not very elegant, yet easy solution to keep track of index
+              // set initial value to 0
+              y[current_row] = 0;
+              // iteration over elements in indices_ / values_ belonging to this row
+              for (size_type i = row_pointer_[current_row]; i < row_pointer_[current_row] + offset_[current_row]; ++i)
+              {
+                y[current_row] += values_[i] * x[indices_[i]];
+              }
             }
           }
 
