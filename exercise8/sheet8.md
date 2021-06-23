@@ -58,7 +58,7 @@ be given in the constructor of the container.
 Implement a class template `Polynomial`, representing a polynomial $`p^{(n)}(x)`$ of degree `n`. In the template parameters
 of that class you should specify the numerical type, i.e., the type of $`x`$, and the polynomial degree `n`.
 
-- The class should be constructible from a `std::array`.
+- The class should be constructible from a `std::array` representing the polynomial coefficients.
 - Implement an `operator()` for the evaluation of the polynomial function.
 - Additionally, implement an `operator*= (T const& alpha)` with `T` the numerical type, to scale the
   polynomial by a given factor `alpha`.
@@ -86,6 +86,15 @@ with $`y_i=f(x_i)`$.
 ### Resources
 - An explanation of the Lagrange polynomials can be found at
 [Wikipedia](https://en.wikipedia.org/wiki/Lagrange_polynomial).
+
+### Submission
+
+This exercise can be submitted for review. Please follow the general instructions given in the [README.md](/README.md)
+page. In summary: 1. create a new branch `<zih-id>/exercise8`, 2. inside the folder `exercise8/` add
+your solution: `task4.cc`, 3. `git add` and `git commit` your added and changed files, 4. push your
+branch to the remote repository by `git push origin <zih-id>/exercise8`, 5. create a merge request.
+
+**Deadline for the submission: end of 2021/07/07**
 
 
 ## Extra Task 5 (Algorithms)
