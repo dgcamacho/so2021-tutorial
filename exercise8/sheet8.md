@@ -8,8 +8,7 @@ reference to the value and scales this argument (using pass-by-reference).
 Use the STL algorithm `std::for_each` to scale the values of a `std::array`, or `std::vector`.
 
 ### Note
-- The semantics of `std::for_each` is slightly different from the for-each implementation shown in the lecture. The functor
-should not return the result, but change its argument that is passed-by-reference!
+- The functor should not return the result, but change its argument that is passed-by-reference!
 - In order to use `std::for_each` you need to include the header `<algorithm>`.
 
 ### Resources
@@ -22,6 +21,8 @@ adapters, algorithms, and maybe also some own function objects:
 1. Find all values which are larger than a certain value.
 2. Find all values which are not equal to certain value.
 3. Multiply all values with a certain factor.
+4. Compute the maximums norm.
+5. Fill container with elements in the reverse order as the input container.
 
 
 ## Task 3 (Iterators)
@@ -54,8 +55,8 @@ be given in the constructor of the container.
 ## Task 4 (Lagrange Polynomials) - Submit for review :pencil:
 
 ### Part 1 (Class Templates)
-Implement a class template `Polynomial`, representing a polynomial of degree `n`. In the template parameters
-of that class you should specify the numerical type and the polynomial degree.
+Implement a class template `Polynomial`, representing a polynomial `$p^{(n)}(x)`$ of degree `n`. In the template parameters
+of that class you should specify the numerical type, i.e., the type of $`x`$, and the polynomial degree `n`.
 
 - The class should be constructible from a `std::array`.
 - Implement an `operator()` for the evaluation of the polynomial function.
@@ -63,16 +64,24 @@ of that class you should specify the numerical type and the polynomial degree.
   polynomial by a given factor `alpha`.
 
 ### Part 2 (Function Templates)
-- Implement a function `differentiate(...)` that expects a `Polynomial` of degree `n` as argument, computes
+- Implement a function `derivative(...)` that expects a `Polynomial` of degree `n` as argument, computes
   the first derivative and returns this as a `Polynomial` of degree `n-1`.
 - Write arithmetic operator `+`, `-`, and `*` for polynomials of degree `n` and `m`. What is the
   corresponding return type?
 
 ### Part 3 (Lagrange Interpolation)
-- Write a function `lagrangeBasis(...)` that computes for a given set of Lagrange nodes, represented as
-  `std::array<double,N>`, the corresponding Lagrange basis.
+- Write a function `lagrangeBasis(nodes, x)` that computes for a given set of Lagrange nodes $`\{x_i\}`$, represented as
+  `std::array<double,N>`, the corresponding Lagrange basis polynomials $`l_i(x)`$ evaluated at $`x`$.
+- The Lagrange interpolation polynomial $`L(f)`$ is a linear combination of the basis polynomials with function evaluations. Let $`f(x)`$ be
+  a given function. Then
 
-- Implement a test routine to validate the lagrange basis.
+```math
+L(f)(x) = \sum_{i=1}^N y_i l_i(x)
+```
+
+with $`y_i=f(x_i)`$.
+
+- Implement a test routine to validate the lagrange basis and interpolation.
 
 ### Resources
 - An explanation of the Lagrange polynomials can be found at
