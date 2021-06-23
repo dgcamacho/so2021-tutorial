@@ -55,7 +55,7 @@ be given in the constructor of the container.
 ## Task 4 (Lagrange Polynomials) - Submit for review :pencil:
 
 ### Part 1 (Class Templates)
-Implement a class template `Polynomial`, representing a polynomial `$p^{(n)}(x)`$ of degree `n`. In the template parameters
+Implement a class template `Polynomial`, representing a polynomial $`p^{(n)}(x)`$ of degree `n`. In the template parameters
 of that class you should specify the numerical type, i.e., the type of $`x`$, and the polynomial degree `n`.
 
 - The class should be constructible from a `std::array`.
