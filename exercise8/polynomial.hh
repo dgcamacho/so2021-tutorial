@@ -13,6 +13,9 @@ private:
 public:
   using Value = T;
 
+  // Initialize a polynomial with all coefficients having this value.
+  explicit Polynomial(Value val) : _coeffs{val} {}
+
   /**
    * Construct a polynomial from an array; the array will be interpreted
    * as a list of coefficients aᵢ, such that the full polynomial may be
@@ -36,7 +39,50 @@ public:
   auto begin() const { return _coeffs.begin(); }
   auto end() { return _coeffs.end(); }
   auto end() const { return _coeffs.end(); }
+
+  // Multiply two polynomials.
+  template <typename S, Size k, Size m>
+  auto friend operator*(Polynomial<S, k> const& p, Polynomial<S, m> const& q)
+      -> Polynomial<S, k + m>;
 };
+
+///////////////////////////////////////////////////////////////////////
+// Arithmetic
+
+/**
+ * Apply a binary operation pointwise to two polynomials.  The
+ * function takes the arguments `(S a, S b)`, where `a` is from `p`
+ * and `b` is from `q`.  If one polynomial is longer than the other,
+ * then copy the remainder to the new polynomial without applying the
+ * function.
+ */
+template <typename T, Size n, Size m, std::invocable<T, T> Op>
+auto apply_pointwise(Polynomial<T, n> const& p, Polynomial<T, m> const& q,
+                     Op op) -> Polynomial<T, std::max(n, m)>;
+
+// Add two polynomials.
+template <typename T, Size n, Size m>
+auto operator+(Polynomial<T, n> const& p, Polynomial<T, m> const& q)
+    -> Polynomial<T, std::max(n, m)>;
+
+// Subtract two polynomials.
+template <typename T, Size n, Size m>
+auto operator-(Polynomial<T, n> const& p, Polynomial<T, m> const& q)
+    -> Polynomial<T, std::max(n, m)>;
+
+// Multiply a polynomial with a scalar.
+template <typename T, Size n>
+auto operator*(Polynomial<T, n> const& p, T alpha) -> Polynomial<T, n>;
+
+///////////////////////////////////////////////////////////////////////
+// Transformations
+
+// Calculate the formal derivative of the given polynomial.
+template <typename T, Size n>
+auto derivative(Polynomial<T, n> const& p) -> Polynomial<T, n - 1>;
+
+///////////////////////////////////////////////////////////////////////
+// Pretty-printing
 
 // Pretty-print a polynomial in its standard form.
 template <typename T, Size n>
