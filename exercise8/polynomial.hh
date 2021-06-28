@@ -3,6 +3,7 @@
 #include "common.hh"
 
 #include <cassert>
+#include <functional>
 
 namespace lagrange {
 
@@ -73,6 +74,26 @@ auto operator-(Polynomial<T, n> const& p, Polynomial<T, m> const& q)
 // Multiply a polynomial with a scalar.
 template <typename T, Size n>
 auto operator*(Polynomial<T, n> const& p, T alpha) -> Polynomial<T, n>;
+
+///////////////////////////////////////////////////////////////////////
+// Lagrange Polynomials
+
+// Calculate the Lagrange basis polynomials lᵢ for the given Lagrange
+// nodes and evaluate them at the point `x`.
+template <Size n>
+auto lagrange_basis_at(Arr<double, n> const& nodes, double x) -> Arr<double, n>;
+
+/**
+ * Calculate the Lagrange interpolation for the given Lagrange nodes.
+ * The function `f` takes a single node `x` and produces the
+ * corresponding `y` value for it.
+ *
+ * Returns a unary function that takes the point at which to evaluate
+ * the interpolation.
+ */
+template <Size n, std::invocable<double> F>
+auto lagrange_interpolation(Arr<double, n> const& nodes, F f)
+    -> std::function<double(double)>;
 
 ///////////////////////////////////////////////////////////////////////
 // Transformations

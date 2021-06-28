@@ -1,13 +1,10 @@
 #pragma once
 
-#include "common.hh"
 #include "indexed-iter.hh"
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
-#include <functional>
 #include <iostream>
 #include <iterator>
 #include <numeric>
@@ -73,6 +70,39 @@ auto operator*(Polynomial<T, n> const& p, T alpha) -> Polynomial<T, n> {
   Polynomial<T, n> tmp{p};
   tmp *= alpha;
   return tmp;
+}
+
+template <Size n>
+auto lagrange_basis_at(Arr<double, n> const& nodes, double x)
+    -> Arr<double, n> {
+  // Comparing doubles.
+  double const eps = 2 * std::numeric_limits<double>::epsilon();
+  // Calculate the i'th Lagrange basis polynomial.
+  auto l_i = [&x, &nodes, &eps](Size i) -> double {
+    double const x_i = nodes[i];
+    return std::accumulate(
+        nodes.begin(), nodes.end(), 1.0,
+        [&x, &x_i, &eps](double acc, double el) {
+          return acc * (std::abs(el - x_i) < eps ? 1 : (x - el) / (x_i - el));
+        });
+  };
+  Arr<double, n> basis;
+  auto const& range = std::ranges::iota_view{0ul, n};
+  std::transform(range.begin(), range.end(), basis.begin(), l_i);
+  return basis;
+}
+
+template <Size n, std::invocable<double> F>
+auto lagrange_interpolation(Arr<double, n> const& nodes, F f)
+    -> std::function<double(double)> {
+  return [&nodes, f](double x) -> double {
+    auto const& range = std::ranges::iota_view{0ul, n};
+    Arr<double, n> const basis = lagrange_basis_at(nodes, x);
+    return std::accumulate(range.begin(), range.end(), 0.0,
+                           [&basis, &nodes, f](double acc, Size i) {
+                             return acc + f(nodes[i]) * basis[i];
+                           }); // Σᵢ₌₀ⁿ⁻¹ f(xᵢ) · lᵢ
+  };
 }
 
 template <typename T, Size n>
