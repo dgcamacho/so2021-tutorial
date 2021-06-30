@@ -4,3 +4,7 @@ sandbox/
 # ignore executables and object files
 a.out
 *.o
+.idea
+cmake-build-debug
+cmake-build-release
+cmake-build-wsl
