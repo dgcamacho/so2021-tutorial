@@ -5,7 +5,7 @@ namespace scprog
 {
 
   template <class T1, class T2>
-  T1 min(T1 a, T2 b)
+  T1 min (T1 a, T2 b)
   {
     return a < b ? a : b; // PROBLEM: result-type of ?: is "common_type" of T1, T2, but return type of min() is fixed to T1.
   }

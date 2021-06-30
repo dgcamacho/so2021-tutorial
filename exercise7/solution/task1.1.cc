@@ -4,7 +4,7 @@
 namespace scprog
 {
   template <class T>
-  std::pair<T,T> minmax(T const& a, T const& b)
+  std::pair<T,T> minmax (T const& a, T const& b)
   {
     return a < b ? std::make_pair(a, b) : std::make_pair(b, a);
   }
@@ -13,7 +13,7 @@ namespace scprog
 
 } // end namespace scprog
 
-int main()
+int main ()
 {
   int a = 5, b = 7;
   int min_ab = std::min(a,b), max_ab = std::max(a,b);
