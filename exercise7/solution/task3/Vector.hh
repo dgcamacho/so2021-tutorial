@@ -12,11 +12,52 @@ class Vector
 public:
   Vector (std::size_t const length)
     : data_(length)
-  {}
+  {
+    // constructor with additional message
+    std::cout << "Vector::Vector(std::size_t)" << std::endl;
+  }
 
   Vector (std::vector<double> const& data)
     : data_(data)
   {}
+
+  // copy constructor
+  Vector (Vector const& other)
+    : data_(other.data_)
+  {
+    // Copy constructor with additional message
+    std::cout << "Vector::Vector(Vector const&)" << std::endl;
+  }
+
+  // move constructor
+  Vector (Vector&& other)
+    : data_(std::move(other.data_))
+  {
+    // Copy constructor with additional message
+    std::cout << "Vector::Vector(Vector&&)" << std::endl;
+  }
+
+  // copy-assignment operator
+  Vector& operator= (Vector const& other)
+  {
+    data_ = other.data_;
+
+    // Copy-assignment operator with additional message
+    std::cout << "Vector::operator=(Vector const&)" << std::endl;
+
+    return *this;
+  }
+
+  // move-assignment operator
+  Vector& operator= (Vector&& other)
+  {
+    data_ = std::move(other.data_);
+
+    // Move-assignment operator with additional message
+    std::cout << "Vector::operator=(Vector&&)" << std::endl;
+
+    return *this;
+  }
 
   // set all entries to `value`
   Vector& operator= (double const value)
@@ -26,7 +67,7 @@ public:
   }
 
   // copmute the Euclidean inner product with `y`
-  double dot (Vector const y) const
+  double dot (Vector const& y) const // ERROR: Take argument by const&
   {
     double sum = 0.0;
     for (size_t i = 0; i < data_.size(); ++i) {
@@ -60,7 +101,7 @@ public:
   }
 
   // add y from this elementwise
-  Vector& operator+= (Vector const y)
+  Vector& operator+= (Vector const& y) // ERROR: Take argument by const&
   {
     for (std::size_t i = 0; i < (*this).size(); ++i) {
       (*this)(i) += y(i);
@@ -69,7 +110,7 @@ public:
   }
 
   // subtract y from this elementwise
-  Vector& operator-= (Vector const y)
+  Vector& operator-= (Vector const& y) // ERROR: Take argument by const&
   {
     for (std::size_t i = 0; i < (*this).size(); ++i) {
       (*this)(i) -= y(i);
@@ -79,7 +120,7 @@ public:
 };
 
 // Elementwise sum of two vectors
-Vector operator+ (Vector const x, Vector const y)
+Vector operator+ (Vector const& x, Vector const& y) // ERROR: Take argument by const&
 {
   Vector tmp(x.size());
   for (std::size_t i = 0; i < x.size(); ++i) {
@@ -89,7 +130,7 @@ Vector operator+ (Vector const x, Vector const y)
 }
 
 // Elementwise difference of two vectors
-Vector operator- (Vector const x, Vector const y)
+Vector operator- (Vector const& x, Vector const& y) // ERROR: Take argument by const&
 {
   Vector tmp(x.size());
   for (std::size_t i = 0; i < x.size(); ++i) {
@@ -99,7 +140,7 @@ Vector operator- (Vector const x, Vector const y)
 }
 
 // Scale the vector from left by `factor`
-Vector operator* (double const factor, Vector const y)
+Vector operator* (double const factor, Vector const& y) // ERROR: Take argument by const&
 {
   Vector tmp(y.size());
   for (std::size_t i = 0; i < y.size(); ++i) {
@@ -109,7 +150,7 @@ Vector operator* (double const factor, Vector const y)
 }
 
 // print the vector to the output stream
-std::ostream& operator<< (std::ostream& str, Vector const v)
+std::ostream& operator<< (std::ostream& str, Vector const& v) // ERROR: Take argument by const&
 {
   if (v.size() == 0) {
     str << "Vector of size 0";

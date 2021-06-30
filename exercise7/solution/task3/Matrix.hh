@@ -34,16 +34,25 @@ public:
     , data_(rows * cols)
   {}
 
+  Matrix (Matrix const& other)
+    : rows_(other.rows_)
+    , cols_(other.cols_)
+    , data_(other.data_)
+  {
+    // Copy  constructor with additional message
+    std::cout << "Matrix::Matrix(Matrix const&)" << std::endl;
+  }
+
   // mutable access to the (i,j)th element
   double& operator() (std::size_t const i, std::size_t const j)
   {
-    return data_[i * rows_ + j];
+    return data_[i * cols_ + j];                              // ERROR: rows_ and cols_ mixed up
   }
 
   // const access to the (i,j)th element
   double const& operator() (std::size_t const i, std::size_t const j) const
   {
-    return data_[i * rows_ + j];
+    return data_[i * cols_ + j];                              // ERROR: rows_ and cols_ mixed up
   }
 
   // set all entries to `value`

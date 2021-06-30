@@ -8,6 +8,11 @@
 // test vector construction, size and element access
 void test1 ()
 {
+  std::cout << "test 1..." << std::endl;
+  // construct a vector with size 0
+  Vector vec0{0};
+  SCPROG_TEST_EQ(vec0.size(), 0);
+
   // construct a vector with size
   Vector vec1{10};
   SCPROG_TEST_EQ(vec1.size(), 10);
@@ -34,6 +39,7 @@ void test1 ()
 // test vector-space operations
 void test2 ()
 {
+  std::cout << "test 2..." << std::endl;
   Vector vec1({1.0,2.0,3.0,4.0,5.0}),
          vec2({2.0,3.0,4.0,5.0,6.0}),
          vec3({3.0,4.0,5.0,6.0,7.0});
@@ -74,6 +80,12 @@ void test2 ()
 // test matrix construction, size and element access
 void test3 ()
 {
+  std::cout << "test 3..." << std::endl;
+  // construct a matrix with size 0
+  Matrix mat0{0,0};
+  SCPROG_TEST_EQ(mat0.rows(), 0);
+  SCPROG_TEST_EQ(mat0.cols(), 0);
+
   // construct a matrix with size
   Matrix mat1{10,10};
   SCPROG_TEST_EQ(mat1.rows(), 10);
@@ -116,6 +128,7 @@ void test3 ()
 // test matrix-vector operations
 void test4 ()
 {
+  std::cout << "test 4..." << std::endl;
   Vector vec({2.0,3.0});
   Matrix mat({
     {1.0,2.0},
@@ -136,6 +149,7 @@ void test4 ()
 // Test the CG algorithm
 void test5 ()
 {
+  std::cout << "test 5..." << std::endl;
   Vector b({1.0,1.0,1.0});
   Matrix A({
     { 2.0,-1.0, 0.0},
@@ -154,10 +168,11 @@ void test5 ()
 int main ()
 {
   test1();
-  test2();
+  test2(); // 9 copy operations vs. 0 copy operations
   test3();
   test4();
-  test5();
+
+  test5(); // 16+4 copy operations vs. 1+1 copy operations, 3 move operations (17 additional constructions)
 
   return scprog::report_errors();
 }
