@@ -22,7 +22,7 @@ namespace scprog
     DenseMatrix (size_type rows = 0, size_type cols = 0);
 
     // mutable access to the matrix entries
-    value_type& operator() (size_type i, size_type j)
+    value_type& operator() (size_type const i, size_type const j)
     {
       assert(i < rows_);
       assert(j < cols_);
@@ -30,7 +30,7 @@ namespace scprog
     }
 
     // const access to the matrix entries
-    value_type const& operator() (size_type i, size_type j) const
+    value_type const& operator() (size_type const i, size_type const j) const
     {
       assert(i < rows_);
       assert(j < cols_);
@@ -53,8 +53,8 @@ namespace scprog
     void mv (Vector const& x, Vector& y) const;
 
   private:
-    std::size_t const rows_;
-    std::size_t const cols_;
+    std::size_t rows_;
+    std::size_t cols_;
     std::vector<double> data_;
   };
 
