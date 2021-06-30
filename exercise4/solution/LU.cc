@@ -8,10 +8,11 @@ namespace scprog {
 
 void LU::compute (DenseMatrix const& A)
 {
+  // check for symmetric matrices
   assert(A.rows() == A.cols());
   std::size_t n = A.rows();
 
-  // initialization
+  // copy-assign the input matrix to the decomposition
   decomposition_ = A;
 
   for (std::size_t i = 0; i < n-1; ++i) {
@@ -27,6 +28,9 @@ void LU::compute (DenseMatrix const& A)
 
 void LU::apply (Vector const& b, Vector& x) const
 {
+  assert(decomposition_.rows() == x.size());
+  assert(decomposition_.cols() == b.size());
+
   // forward elimination
   Vector y{x.size()};
   for (std::size_t i = 0; i < y.size(); ++i) {

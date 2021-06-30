@@ -9,8 +9,9 @@ namespace scprog
   {
   public:
     // decomposing the matrix m, without modifing it
-    void compute (DenseMatrix const& m);
+    void compute (DenseMatrix const& A);
 
+    // Solve the linear system A*x = b using the decomposed matrix
     void apply (Vector const& b, Vector& x) const;
 
   private:
