@@ -48,7 +48,62 @@ or `--track-origins=yes` to see where uninitialized values come from, or another
 - [Valgrind](http://valgrind.org/docs/manual/quick-start.html)
 
 
-## Task 2 (Iterators)
+## Task 2 (Inheritance and Functions)
+Find the errors in the following program. What is the output after the incorrect lines are removed,
+and why?
+```c++
+#include <iostream>
+
+class SuperClass
+{
+private:
+  void foo () const
+  {
+    std::cout << "SuperClass::foo" << std::endl;
+  }
+};
+
+class DerivedClass : public SuperClass
+{
+public:
+  void foo ()
+  {
+    std::cout << "DerivedClass::foo" << std::endl;
+  }
+};
+
+class LeafClass : private DerivedClass
+{
+protected:
+  void bar ()
+  {
+    foo();
+  }
+};
+
+void test (SuperClass const& super)
+{
+  super.foo();
+}
+
+int main ()
+{
+  SuperClass super;
+  DerivedClass derived;
+  LeafClass leaf;
+
+  super.foo();
+
+  derived.foo();
+  test(derived);
+
+  leaf.bar();
+  test(leaf);
+}
+```
+
+
+## Task 3 (Iterators)
 In *python* operations on ranges are a fundamental concept and make the language very nice to use. An
 example is the `map` operation, that takes a range and applies a functor to each element, when traversing the
 range:
@@ -95,7 +150,7 @@ Try out your implementation with a vector and a list filled with some values, or
 from exercise sheet 9.
 
 
-## Task 3 (Functor composition)
+## Task 4 (Functor composition)
 If you have functors that represent some mathematical functions like `sqr`, `sqrt`, `exp`, `tanh`,... how could you combine these functors in order to build more complex operations. Mathematically spoken: let $`f : A \to B`$ and $`g : B \to C`$ be two unary functors with `argument_types` $`A`$ and $`B`$, and `return_types` $`B`$ and $`C`$ respectively. Build a functor `Composer` that implements the composition $`f \circ g : A \to C, x \mapsto g(f(x))`$.
 
 In order to do so, write a class `Composer` first that takes two constructor arguments representing the functors for $`f`$ and $`g`$ and provide a free function that instantiates this class:
@@ -129,38 +184,23 @@ solutions.
 - [cppreference:class_template_argument_deduction](https://en.cppreference.com/w/cpp/language/class_template_argument_deduction)
 
 
-## Task 4 (Smart Pointers)
-Consider the following code:
-```c++
-#include <memory>
-std::shared_ptr<int> create_int_ptr(int value)
-{
-  return std::shared_ptr<int>( new int{value} );
-  // or: return make_shared<int>(value);
-}
 
-int main()
-{
-  std::shared_ptr<int> i;
-  {
-    std::shared_ptr<int> j = create_int_ptr(2);
-    i = j;
+## Extra Task 5 (GotW-2: Temporaries)
+See [GotW #2](https://herbsutter.com/2013/05/13/gotw-2-solution-temporary-objects/).
+
+1. What is a temporary object?
+
+2. You are doing a code review. A programmer has written the following function, which uses unnecessary temporary or extra objects in at least three places. How many can you identify, and how should the programmer fix them?
+
+```c++
+std::string find_addr (std::list<employee> emps, std::string name) {
+  for (auto i = std::begin(emps); i != std::end(emps); i++) {
+    if( *i == name ) {
+      return i->addr;
+    }
   }
-  // #1
-  return 0;
+  return "";
 }
 ```
-- Is this a valid program, or are there *dangling* pointer?
-- How many pointers point to the memory of the allocated integer when reaching line `#1`?
-- Can you replace `shared_ptr` by `unique_ptr` in this code? Why (not)?
 
-
-## Extra Task 5 (GotW-89: Smart Pointers)
-See [GotW #89](https://herbsutter.com/2013/05/29/gotw-89-solution-smart-pointers).
-
-1. When should you use `shared_ptr` vs. `unique_ptr`? List as many considerations as you can.
-2. (Guru) Why should you almost always use `make_shared` to create an object to be owned by `shared_ptr`s? Explain.
-3. (Guru) Why should you almost always use `make_unique` to create an object to be initially owned by a `unique_ptr`? Explain.
-
-## Extra Task 6 (GotW-91: Smart Pointer Parameters)
-Also interesting: Passing smart pointers to functions? See [GotW #91](https://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters)
+Do not change the operational semantics of this function, even though they could be improved.
