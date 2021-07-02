@@ -1,10 +1,10 @@
 template <typename T, int N>
-T& Polynomial<T,N>::operator[] (int const& index) {
+T& Polynomial<T, N>::operator[] (int const& index) {
 	return coeff_[index];
 }
 
 template <typename T, int N>
-T const& Polynomial<T,N>::operator[] (int const& index) const {
+T const& Polynomial<T, N>::operator[] (int const& index) const {
 	return coeff_[index];
 }
 
@@ -25,12 +25,6 @@ Polynomial<T, N>& Polynomial<T, N>::operator*= (value_type const& alpha) {
 	return *this;
 }
 
-// unused?
-template <typename T, int N>
-std::array<T, N+1> Polynomial<T, N>::get () {
-	return coeff_;
-}
-
 template <typename T, int N>
 Polynomial<T, N-1> derivative (Polynomial<T, N>& poly) {
 	Polynomial<T, N-1> deriv{};
@@ -43,49 +37,38 @@ Polynomial<T, N-1> derivative (Polynomial<T, N>& poly) {
 // possibly has zero entry as highest order coefficients
 template <typename T, int M, int N>
 Polynomial<T, std::max(M, N)> operator+ (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
-	/*std::array<T, M+1> poly1_coeff{ poly1.get() };
-	std::array<T, N+1> poly2_coeff{ poly2.get() };
-	if (M >= N) {
-		for (int i{0}; i < N+1; ++i) {
-			poly1_coeff[i] += poly2_coeff[i];
-		}
-		return Polynomial<T, M> (poly1_coeff);
-	} else {
-		for (int i{0}; i < M+1; ++i) {
-			poly2_coeff[i] += poly1_coeff[i];
-		}
-		return Polynomial<T, N> (poly2_coeff);
-	}*/
 	Polynomial<T, std::max(M, N)> res{};
+	// until degree of smaller polynomial, add both coefficients
 	for (int i{0}; i <= std::min(M, N); ++i) {
 		res[i] = poly1[i] + poly2[i];
 	}
-	if (M >= N) {
+	// if one polynomial has higher degree, just copy it's coefficients for the higher orders
+	if (M > N) {
 		for (int i{N+1}; i <= M; ++i) {
 			res[i] = poly1[i];
 		}
-	} else {
+	} else if (M < N) {
 		for (int i{M+1}; i <= N; ++i) {
 			res[i] = poly2[i];
 		}
 	}
 	return res;
-	//std::cout << "M: " << M << ", N: " << N << ", M >= N: " << (M >= N) << std::endl;
-	//return poly1;
 }
 
 // possibly has zero entry as highest order coefficients
 template <typename T, int M, int N>
 Polynomial<T, std::max(M, N)> operator- (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
 	Polynomial<T, std::max(M, N)> res{};
+	// until degree of smaller polynomial, subtract both coefficients
 	for (int i{0}; i <= std::min(M, N); ++i) {
 		res[i] = poly1[i] - poly2[i];
 	}
-	if (M >= N) {
+	// if one polynomial has higher degree, just copy it's (negated) coefficients for the higher orders
+	if (M > N) {
 		for (int i{N+1}; i <= M; ++i) {
 			res[i] = poly1[i];
 		}
-	} else {
+	} else if (M < N) {
 		for (int i{M+1}; i <= N; ++i) {
 			res[i] = -poly2[i];
 		}
@@ -93,7 +76,7 @@ Polynomial<T, std::max(M, N)> operator- (Polynomial<T, M>& poly1, Polynomial<T, 
 	return res;
 }
 
-// no check for zero polynom
+// no check for zero polynom, so result is possibly just many zeroes
 template <typename T, int M, int N>
 Polynomial<T, M+N> operator* (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
 	Polynomial<T, M+N> result{};
@@ -105,11 +88,14 @@ Polynomial<T, M+N> operator* (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) 
 	return result;
 }
 
+// both lagrange_basis and lagrange_interpolation don't use the Polynomial class,
+// so maybe there is a better implementation
 template <std::size_t N>
 std::array<double, N> lagrange_basis (std::array<double, N> const& nodes, double const x) {
 	std::array<double, N> res{};
 	for (std::size_t i{0}; i < N; ++i) {
 		res[i] = 1.0;
+		// both for-loops do the same, but they skip j = i
 		for (std::size_t j{0}; j < i; ++j) {
 			res[i] *= (x - nodes[j]) / (nodes[i] - nodes[j]);
 		}
