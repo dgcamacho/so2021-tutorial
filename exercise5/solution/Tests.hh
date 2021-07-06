@@ -108,7 +108,7 @@ namespace scprog
     /// Tests whether the value of an expression is approximately equal to an expected value
     // implementation for scalars
     template <class T1, class T2,
-      std::enable_if_t<std::is_arithmetic_v<T1> && std::is_arithmetic_v<T2>, int>* = nullptr>
+      std::enable_if_t<std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value, int>* = nullptr>
     inline void _test_approx(T1 const& expr_value, T2 const& value,
                              char const* expr_str, char const* value_str, char const* file, size_t line)
     {
