@@ -4,26 +4,27 @@
 #include <array> // std::array
 #include <cmath> // std::pow
 
-// notes: being more consistent with use of T or value_type
-// possibly introduce size_type
-
 namespace scprog
 {
-	template <typename T, int N>
+	template <typename T, std::size_t N>
 	class Polynomial 
 	{
 	public:
 		using value_type = T;
 
+		using size_type = std::size_t;
+
+		// default constructor
 		Polynomial () : coeff_{0} {}
 		
+		// constructor from array of coefficients
 		Polynomial (std::array<value_type, N+1> const coeff) : coeff_(coeff) {}
 
 		// mutable access to coefficient of order index
-		value_type& operator[] (int const& index);
+		value_type& operator[] (size_type const& index);
 
 		// non-mutable access to coefficient of order index
-		value_type const& operator[] (int const& index) const;
+		value_type const& operator[] (size_type const& index) const;
 
 		// evaluate polynomial at x
 		value_type operator() (value_type const& x);
@@ -37,19 +38,19 @@ namespace scprog
 	};
 
 	// derivative of polynomial
-	template <typename T, int N>
+	template <typename T, std::size_t N>
 	Polynomial<T, N-1> derivative (Polynomial<T, N>& poly);
 
 	// adds two polynomials of any degree
-	template <typename T, int M, int N>
+	template <typename T, std::size_t M, std::size_t N>
 	Polynomial<T, std::max(M, N)> operator+ (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2);
 
 	// subtracts two polynomials of any degree
-	template <typename T, int M, int N>
+	template <typename T, std::size_t M, std::size_t N>
 	Polynomial<T, std::max(M, N)> operator- (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2);
 
 	// multiplies two polynomials of any degree
-	template <typename T, int M, int N>
+	template <typename T, std::size_t M, std::size_t N>
 	Polynomial<T, M+N> operator* (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2);
 
 	// computes and evaluates Lagrange basis polynomials over the grid nodes at position x,
@@ -64,4 +65,3 @@ namespace scprog
 	#include "Polynomial.impl.hh"
 
 } // end namespace
-

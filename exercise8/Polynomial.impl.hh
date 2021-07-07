@@ -1,54 +1,54 @@
-template <typename T, int N>
-T& Polynomial<T, N>::operator[] (int const& index) {
+template <typename T, std::size_t N>
+T& Polynomial<T, N>::operator[] (size_type const& index) {
 	return coeff_[index];
 }
 
-template <typename T, int N>
-T const& Polynomial<T, N>::operator[] (int const& index) const {
+template <typename T, std::size_t N>
+T const& Polynomial<T, N>::operator[] (size_type const& index) const {
 	return coeff_[index];
 }
 
-template <typename T, int N>
+template <typename T, std::size_t N>
 T Polynomial<T, N>::operator() (value_type const& x) {
 	value_type res{ coeff_[0] };
-	for (int i{1}; i < N+1; ++i) {
+	for (size_type i{1}; i < N + 1; ++i) {
 		res += coeff_[i] * std::pow(x, i);
 	}
 	return res;
 }
 
-template <typename T, int N>
+template <typename T, std::size_t N>
 Polynomial<T, N>& Polynomial<T, N>::operator*= (value_type const& alpha) {
-	for (int i{0}; i < N+1; ++i) {
+	for (size_type i{0}; i < N + 1; ++i) {
 		coeff_[i] *= alpha;
 	}
 	return *this;
 }
 
-template <typename T, int N>
+template <typename T, std::size_t N>
 Polynomial<T, N-1> derivative (Polynomial<T, N>& poly) {
 	Polynomial<T, N-1> deriv{};
-	for (int i{0}; i < N; ++i) {
+	for (std::size_t i{0}; i < N; ++i) {
 		deriv[i] = poly[i+1] * (i + 1);
 	}
 	return deriv;
 }
 
 // possibly has zero entry as highest order coefficients
-template <typename T, int M, int N>
+template <typename T, std::size_t M, std::size_t N>
 Polynomial<T, std::max(M, N)> operator+ (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
 	Polynomial<T, std::max(M, N)> res{};
 	// until degree of smaller polynomial, add both coefficients
-	for (int i{0}; i <= std::min(M, N); ++i) {
+	for (std::size_t i{0}; i <= std::min(M, N); ++i) {
 		res[i] = poly1[i] + poly2[i];
 	}
 	// if one polynomial has higher degree, just copy it's coefficients for the higher orders
 	if (M > N) {
-		for (int i{N+1}; i <= M; ++i) {
+		for (std::size_t i{N+1}; i <= M; ++i) {
 			res[i] = poly1[i];
 		}
 	} else if (M < N) {
-		for (int i{M+1}; i <= N; ++i) {
+		for (std::size_t i{M+1}; i <= N; ++i) {
 			res[i] = poly2[i];
 		}
 	}
@@ -56,20 +56,20 @@ Polynomial<T, std::max(M, N)> operator+ (Polynomial<T, M>& poly1, Polynomial<T, 
 }
 
 // possibly has zero entry as highest order coefficients
-template <typename T, int M, int N>
+template <typename T, std::size_t M, std::size_t N>
 Polynomial<T, std::max(M, N)> operator- (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
 	Polynomial<T, std::max(M, N)> res{};
 	// until degree of smaller polynomial, subtract both coefficients
-	for (int i{0}; i <= std::min(M, N); ++i) {
+	for (std::size_t i{0}; i <= std::min(M, N); ++i) {
 		res[i] = poly1[i] - poly2[i];
 	}
 	// if one polynomial has higher degree, just copy it's (negated) coefficients for the higher orders
 	if (M > N) {
-		for (int i{N+1}; i <= M; ++i) {
+		for (std::size_t i{N+1}; i <= M; ++i) {
 			res[i] = poly1[i];
 		}
 	} else if (M < N) {
-		for (int i{M+1}; i <= N; ++i) {
+		for (std::size_t i{M+1}; i <= N; ++i) {
 			res[i] = -poly2[i];
 		}
 	}
@@ -77,11 +77,14 @@ Polynomial<T, std::max(M, N)> operator- (Polynomial<T, M>& poly1, Polynomial<T, 
 }
 
 // no check for zero polynom, so result is possibly just many zeroes
-template <typename T, int M, int N>
-Polynomial<T, M+N> operator* (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
-	Polynomial<T, M+N> result{};
-	for (int i{0}; i < M+N+1; ++i) {
-		for (int j{ std::max(0, i-N) }; j <= std::min(i, M); ++j) {
+template <typename T, std::size_t M, std::size_t N>
+Polynomial<T, M + N> operator* (Polynomial<T, M>& poly1, Polynomial<T, N>& poly2) {
+	Polynomial<T, M + N> result{};
+	// need variable with value zero but of type std::size_t, because otherwise there is a no-matching-function error
+	// for the "std::max(0, i-N)" expression, because 0 and i-N have different types
+	std::size_t zero{};
+	for (std::size_t i{0}; i < M + N + 1; ++i) {
+		for (std::size_t j{ std::max(zero, i-N) }; j <= std::min(i, M); ++j) {
 			result[i] += poly1[j] * poly2[i-j];
 		}
 	}
