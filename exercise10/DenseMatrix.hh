@@ -42,6 +42,17 @@ public:
     return data_[i * cols_ + j];
   }
 
+  // Return the `c`th column of the vector as a `Vec`; this may be used
+  // in template expressions.
+  Vec<value_type> operator[](size_t const c) const {
+    assert(c < rows_);
+    Vec<value_type> tmp(rows_);
+    for (size_t i = 0; i < cols_; ++i) {
+      tmp[i] = data_[c * cols_ + i];
+    }
+    return tmp;
+  }
+
   // return the number of rows
   size_type rows() const { return rows_; }
 
@@ -56,5 +67,11 @@ private:
   size_type   cols_;
   Vec<double> data_;
 };
+
+// Create a matrix-vector multiplication expression of a dense matrix
+// with some vector.
+auto operator*(DenseMatrix<auto> const& a, auto const& b) {
+  return mat_vec(a, b);
+}
 
 } // end namespace scprog
