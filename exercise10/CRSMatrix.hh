@@ -6,6 +6,8 @@
 #include <variant>
 #include <vector>
 
+#include "Vector.hh"
+
 namespace scprog {
 
 template <typename T>
@@ -36,6 +38,19 @@ public:
      * cols() ≡ size(x).
      */
     auto mv(Vector<value_type> const& x, Vector<value_type>& y) const -> void;
+
+    // Return the `c`th column of the vector as a `Vec`; this may be
+    // used in template expressions.
+    auto operator[](size_type const c) -> Vec<value_type> {
+      assert(c < _rows);
+      Vec<value_type> tmp(_rows);
+      auto const      start = _offsets[c];
+      auto const      stop  = _offsets[c + 1];
+      for (size_type i = start; i < stop; ++i) {
+        tmp[i] = _values[i];
+      }
+      return tmp;
+    }
   };
 
 private:
@@ -88,6 +103,13 @@ public:
   // representation without redundant zeros.
   auto compress() -> CompressedMatrix;
 };
+
+// Create a matrix-vector multiplication expression of a compressed
+// sparse matrix with some vector.
+auto operator*(typename CRSMatrix<auto>::CompressedMatrix const& a,
+               auto const&                                       b) {
+  return mat_vec(a, b);
+}
 
 } // namespace scprog
 
