@@ -40,4 +40,11 @@ auto operator-(T const& a, S const& b) {
                     }};
 }
 
+// Return the matrix-vector product of the given values.
+auto mat_vec(auto const& a, auto const& b) {
+  return BinaryExpr{a, b, [](auto const& mat, auto const& vec, std::size_t i) {
+                      return dot_product(mat[i], vec);
+                    }};
+}
+
 } // namespace scprog
