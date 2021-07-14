@@ -59,8 +59,8 @@ Implement a list of types, i.e., a so called meta-type-list. It has the form
 template <typename H, typename T>
 struct List
 {
-  using Head = H;   // the type at the fron of the list
-  using Tail = T;   // the remaining type in form of a list List<...>
+  using Head = H;   // the type at the front of the list
+  using Tail = T;   // the remaining types in form of a List<...>
 }
 ```
 
@@ -101,3 +101,6 @@ struct Append<NullType, Type> { // template specialization
   using type = List< Type, NullType >;
 };
 ```
+
+### Resources
+- A. Alexandrescu, *Modern C++ Design* (2001), Chapter 3
